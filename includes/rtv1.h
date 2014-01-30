@@ -6,7 +6,7 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/01/30 17:38:11 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/01/30 17:57:13 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/01/30 18:07:52 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,10 @@ typedef struct	s_sphere
 	double	radius;
 	t_color	*color;
 }				t_sphere;
+
+/*
+** Color
+*/
+double	brightness(t_color	*c);
 
 #endif
