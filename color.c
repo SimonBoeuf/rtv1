@@ -10,29 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "rtv1.h"
+# include "includes/rtv1.h"
 
-t_color	*new_color(void)
+t_color	*new_color(double red, double green, double blue, double special)
 {
 	t_color	*c;
 
 	c = (t_color*)malloc(sizeof(t_color));
-	c->red = 0;
-	c->green = 0;
-	c->blue = 0;
-	c->special = 0;
+	c->red = red;
+	c->green = green;
+	c->blue = blue;
+	c->special = special;
 	return (c);
 }
 
-double	brightness(t_color *c)
+void	delete_color(t_color *c)
 {
-	return ((c->red + c->green + c->blue) / 3);
-}
-
-t_color	*colorScalar(double scalar, t_color *c1)
-{
-	t_color	*c2;
-
-	c2 = new_color();
-	c2->red = c1->red *scalar;
+	free(c);
 }
