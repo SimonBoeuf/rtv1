@@ -66,6 +66,8 @@ typedef struct	s_sphere
 	t_color	*color;
 }				t_sphere;
 
+void		rtv1(char *file);
+
 /*
 ** Color
 */
