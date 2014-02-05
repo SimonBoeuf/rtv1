@@ -18,9 +18,13 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <math.h>
+# include <mlx/mlx.h>
 # include "libft/includes/libft.h"
 
 # define BUFF_SIZE 32
+
+# define WIN_WID 640
+# define WIN_HEI 480
 
 typedef struct		s_color
 {
@@ -82,7 +86,46 @@ typedef struct		s_scene
 	t_sphere	*spheres;
 }					t_scene;
 
+typedef struct		s_img
+{
+	void		*img;
+	char		*data;
+	int			bbp;
+	int			size_line;
+	int			endian;
+}					t_img;
+
+typedef struct		s_win
+{
+	void		*mlx;
+	void		*win;
+	t_img		*img;
+}					t_win;
+
+/*
+** Core
+*/
 void		rtv1(char *file);
+void		init_scene(char *file);
+void		display_scene(void);
+
+/*
+** Img
+*/
+t_img		*init_img(void);
+void		img_del(t_img *img);
+
+/*
+** Window
+*/
+t_win		*init_env(void);
+void		env_del(void);
+
+/*
+** Draw
+*/
+void		mlx_put_pixel_to_image(int x, int y, int color);
+void		ft_draw_img(void);
 
 /*
 ** GetNextLine & misc

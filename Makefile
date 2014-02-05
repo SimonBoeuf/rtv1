@@ -22,6 +22,9 @@ SRCS		= 		main.c			\
 				f_sphere.c			\
 				f_plane.c			\
 				f_light.c			\
+				window.c			\
+				img_fct.c			\
+				draw.c				\
 
 OBJS		= $(SRCS:.c=.o)
 

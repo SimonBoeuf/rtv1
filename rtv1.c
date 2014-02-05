@@ -1,30 +1,24 @@
 #include "includes/rtv1.h"
 
-int		winningObjIndex(double *objs)
+void	display_scene(void)
 {
-	int		min_val_index;
-	double	min;
-	int		i;
+	t_win	*window;
 
-	if (objs != NULL)
-	{
-		min = 0;
-		i = 0;
-		min_val_index = -1;
-		while (objs[i] != 0)
-		{
-			if ((min > objs[i] || min == 0) && objs[i++] > 0)
-			{
-					min = objs[i - 1];
-					min_val_index = i - 1;
-			}
-		}
-		return (min_val_index);
-	}
-	return (-1);
+	window = init_env();
+	window->img = init_img();
+
+	ft_draw_img();
+	mlx_put_image_to_window(window->mlx, window->win, window->img->img, 0, 0);
+	mlx_loop(window->mlx);
 }
 
 void	rtv1(char *scene_file)
+{
+	init_scene(scene_file);
+	display_scene();
+}
+
+void	init_scene(char *scene_file)
 {
 	int		fd;
 	int		ret;
