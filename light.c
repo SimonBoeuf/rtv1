@@ -13,9 +13,14 @@ t_light	*new_light(t_vect *p, t_color *c)
 
 void	add_light(t_light *start, t_light *new)
 {
-	while (start->next != NULL)
-		start = start->next;
-	start->next = new;
+	if (start == NULL)
+		start = new;
+	else
+	{
+		while (start->next != NULL)
+			start = start->next;
+		start->next = new;
+	}
 }
 
 void	delete_lights(t_light **start)

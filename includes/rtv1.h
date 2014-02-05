@@ -85,9 +85,10 @@ typedef struct		s_scene
 void		rtv1(char *file);
 
 /*
-** GetNextLine
+** GetNextLine & misc
 */
 int			get_next_line(int const fd, char **line);
+double		ft_atodouble(char **s);
 
 /*
 ** Color
@@ -95,6 +96,7 @@ int			get_next_line(int const fd, char **line);
 t_color		*new_color(double red, double green, double blue, double special);
 void		delete_color(t_color *c);
 double		brightness(t_color *c);
+t_color		*get_color(int fd);
 
 t_color		*colorScalar(double scalar, t_color *c1);
 t_color		*colorAdd(t_color *c1, t_color *c2);
@@ -107,6 +109,7 @@ t_color		*clip(t_color *c1);
 */
 t_vect		*new_vector(double x, double y, double z);
 void		delete_vect(t_vect *v);
+t_vect		*get_vector(int fd);
 
 t_vect		*normalize(t_vect *v1);
 t_vect		*negative(t_vect *v1);
@@ -122,6 +125,7 @@ double		magnitude(t_vect *v);
 */
 t_camera	*new_camera(t_vect *p, t_vect *di, t_vect *r, t_vect *dwn);
 void		delete_camera(t_camera *c);
+t_camera	*get_camera(int fd);
 
 /*
 ** Ray
@@ -136,6 +140,9 @@ t_light		*new_light(t_vect *p, t_color *c);
 void		add_light(t_light *start, t_light *new);
 void		delete_lights(t_light **l);
 
+t_light		*get_spots(int fd);
+t_light		*get_spot(int fd);
+
 /*
 ** Plane
 */
@@ -143,19 +150,26 @@ t_plane		*new_plane(t_vect *normal, double distance, t_color *c);
 void		add_plane(t_plane *start, t_plane *new);
 double		findPlaneIntersection(t_plane *p, t_ray *ray);
 void		delete_planes(t_plane **p);
+t_plane		*get_planes(int fd);
+t_plane		*get_plane(int fd);
 
 /*
 ** Sphere
 */
 t_sphere	*new_sphere(t_vect *center, double radius, t_color *color);
 void		add_sphere(t_sphere *start, t_sphere *new);
-t_vect		*getNormalAtSphere(t_sphere *sphere, t_vect *point);
 void		delete_spheres(t_sphere **s);
+
+double		findSphereIntersection(t_sphere *s, t_ray *r);
+t_vect		*getNormalAtSphere(t_sphere *sphere, t_vect *point);
+t_sphere	*get_spheres(int fd);
+t_sphere	*get_sphere(int fd);
 
 /*
 ** Scene
 */
 t_scene		*new_scene(void);
+t_scene		*get_scene(void);
 void		delete_scene(t_scene *s);
 
 #endif

@@ -33,3 +33,20 @@ double	brightness(t_color *c)
 {
 	return ((c->red + c->green + c->blue) / 3);
 }
+
+t_color	*get_color(int fd)
+{
+	double	r;
+	double	g;
+	double	b;
+	double	s;
+	char	*line;
+
+	if (get_next_line(fd, &line) < 1)
+			exit(-1);
+	r = ft_atodouble(&line);
+	g = ft_atodouble(&line);
+	b = ft_atodouble(&line);
+	s = ft_atodouble(&line);
+	return (new_color(r, g, b, s));
+}

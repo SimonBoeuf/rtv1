@@ -18,6 +18,10 @@ SRCS		= 		main.c			\
 				v_vect.c			\
 				scene.c				\
 				ft_get_next_line.c	\
+				ft_atodouble.c		\
+				f_sphere.c			\
+				f_plane.c			\
+				f_light.c			\
 
 OBJS		= $(SRCS:.c=.o)
 

@@ -14,9 +14,14 @@ t_plane	*new_plane(t_vect *normal, double distance, t_color *c)
 
 void	add_plane(t_plane *start, t_plane *new)
 {
-	while (start->next != NULL)
-			start = start->next;
-	start->next = new;
+	if (start == NULL)
+			start = new;
+	else
+	{
+		while (start->next != NULL)
+				start = start->next;
+		start->next = new;
+	}
 }
 
 double	findPlaneIntersection(t_plane *p, t_ray *ray)
