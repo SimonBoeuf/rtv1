@@ -7,12 +7,28 @@ t_light	*new_light(t_vect *p, t_color *c)
 	l = (t_light*)malloc(sizeof(t_light));
 	l->position = p;
 	l->color = c;
+	l->next = NULL;
 	return (l);
 }
 
-void	delete_light(t_light *l)
+void	add_light(t_light *start, t_light *new)
 {
-	delete_vect(l->position);
-	delete_color(l->color);
-	free(l);
+	while (start->next != NULL)
+		start = start->next;
+	start->next = new;
+}
+
+void	delete_lights(t_light **start)
+{
+	t_light	*tmp;
+
+	while (*start != NULL)
+	{
+		tmp = (*start)->next;
+		delete_vect((*start)->position);
+		delete_color((*start)->color);
+		(*start)->next = NULL;
+		free(*start);
+		*start = tmp;
+	}
 }

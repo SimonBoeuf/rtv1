@@ -28,3 +28,8 @@ void	delete_color(t_color *c)
 {
 	free(c);
 }
+
+double	brightness(t_color *c)
+{
+	return ((c->red + c->green + c->blue) / 3);
+}

@@ -11,6 +11,13 @@ t_sphere	*new_sphere(t_vect *center, double radius, t_color *color)
 	return (s);
 }
 
+void		add_sphere(t_sphere *start, t_sphere *new)
+{
+	while (start->next != NULL)
+		start = start->next;
+	start->next = new;
+}
+
 t_vect		*getNormalAtSphere(t_sphere *sphere, t_vect *point)
 {
 	t_vect	*v;
@@ -43,9 +50,17 @@ double		findSphereIntersection(t_sphere *s, t_ray *r)
 	return (rslt);
 }
 
-void	delete_sphere(t_sphere *s)
+void	delete_spheres(t_sphere **start)
 {
-	delete_vect(s->center);
-	delete_color(s->color);
-	free(s);
+	t_sphere	*tmp;
+
+	while (*start != NULL)
+	{
+		tmp = (*start)->next;
+		delete_vect((*start)->center);
+		delete_color((*start)->color);
+		(*start)->next = NULL;
+		free(*start);
+		*start = tmp;
+	}
 }

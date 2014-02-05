@@ -5,17 +5,19 @@ NAME		= rtv1
 INCLUDE		= ./includes/
 
 SRCS		= 		main.c			\
-				rtv1.c			\
-				camera.c		\
-				d_vect.c		\
-				ray.c			\
-				vect.c			\
-				color.c			\
-				f_color.c		\
-				light.c			\
-				plane.c			\
-				sphere.c		\
-				v_vect.c		\
+				rtv1.c				\
+				camera.c			\
+				d_vect.c			\
+				ray.c				\
+				vect.c				\
+				color.c				\
+				f_color.c			\
+				light.c				\
+				plane.c				\
+				sphere.c			\
+				v_vect.c			\
+				scene.c				\
+				ft_get_next_line.c	\
 
 OBJS		= $(SRCS:.c=.o)
 

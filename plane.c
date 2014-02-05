@@ -8,7 +8,15 @@ t_plane	*new_plane(t_vect *normal, double distance, t_color *c)
 	p->normal = normal;
 	p->distance = distance;
 	p->color = c;
+	p->next = NULL;
 	return (p);
+}
+
+void	add_plane(t_plane *start, t_plane *new)
+{
+	while (start->next != NULL)
+			start = start->next;
+	start->next = new;
 }
 
 double	findPlaneIntersection(t_plane *p, t_ray *ray)
@@ -27,9 +35,17 @@ double	findPlaneIntersection(t_plane *p, t_ray *ray)
 	}
 }
 
-void	delete_plane(t_plane *p)
+void	delete_planes(t_plane **start)
 {
-	delete_vect(p->normal);
-	delete_color(p->color);
-	free(p);
+	t_plane	*tmp;
+
+	while (*start != NULL)
+	{
+		tmp = (*start)->next;
+		delete_vect((*start)->normal);
+		delete_color((*start)->color);
+		(*start)->next = NULL;
+		free(*start);
+		*start = tmp;
+	}
 }
