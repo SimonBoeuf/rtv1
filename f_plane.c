@@ -10,7 +10,12 @@ t_plane	*get_planes(int fd)
 	while ((r = get_next_line(fd, &line)) > 0 && ft_strcmp(line, "----------"))
 	{
 		if (!ft_strcmp("new:", line))
+		{
+			if (p == NULL)
+				p = get_plane(fd);
+			else
 				add_plane(p, get_plane(fd));
+		}
 	}
 	if (r == -1)
 			exit (-1);

@@ -23,8 +23,16 @@
 
 # define BUFF_SIZE 32
 
-# define WIN_WID 640
-# define WIN_HEI 480
+# define KEYECHAP 65307
+
+# define WD 300
+# define HI 200
+
+# define AADEPTH 1
+# define AATHRESHOLD 0.1
+# define ASPECTRATIO ((double)WD / (double)HI)
+# define AMBIENTLIGHT 0.2
+# define ACCURACY 0.00000001
 
 typedef struct		s_color
 {
@@ -116,6 +124,13 @@ t_img		*init_img(void);
 void		img_del(t_img *img);
 
 /*
+** Hooks
+*/
+void		ft_exit(void);
+int			ft_key_hook(int keycode);
+int			ft_expose_hook(void);
+
+/*
 ** Window
 */
 t_win		*init_env(void);
@@ -140,6 +155,7 @@ t_color		*new_color(double red, double green, double blue, double special);
 void		delete_color(t_color *c);
 double		brightness(t_color *c);
 t_color		*get_color(int fd);
+int			get_color_number(t_color *c);
 
 t_color		*colorScalar(double scalar, t_color *c1);
 t_color		*colorAdd(t_color *c1, t_color *c2);

@@ -1,4 +1,4 @@
-#include "includes/rtv1.h"
+# include "includes/rtv1.h"
 
 t_vect		*getNormalAtSphere(t_sphere *sphere, t_vect *point)
 {
@@ -15,17 +15,17 @@ double		findSphereIntersection(t_sphere *s, t_ray *r)
 	double	rslt;
 
 	b = (2 * (r->origin->x - s->center->x) * r->direction->x) + 
-		(2 * (r->origin->y - s->center->y) * r->direction->y)
-		+ (2 * (r->origin->z - s->center->z) * r->direction->z);
+		(2 * (r->origin->y - s->center->y) * r->direction->y) +
+		(2 * (r->origin->z - s->center->z) * r->direction->z);
 	c = pow(r->origin->x - s->center->x, 2) +
 		pow(r->origin->y - s->center->y, 2) +
 		pow(r->origin->z - s->center->z, 2) - s->radius * s->radius;
 	d = b * b - 4 * c;
 	if (d > 0)
 	{
-		rslt = (-b - sqrt(d / 2) - 0.000001) > 0 ?
-			-b - sqrt(d / 2) - 0.000001 :
-			-b + sqrt(d / 2) - 0.000001;
+		rslt = (-b - sqrt(d) / 2) - 0.000001 > 0 ?
+			-b - sqrt(d) / 2 - 0.000001 :
+			-b + sqrt(d) / 2 - 0.000001;
 	}
 	else
 		rslt = -1;
@@ -42,10 +42,15 @@ t_sphere	*get_spheres(int fd)
 	while ((r = get_next_line(fd, &line)) > 0 && ft_strcmp(line, "----------"))
 	{
 		if (!ft_strcmp("new:", line))
+		{
+			if (s == NULL)
+				s = get_sphere(fd);
+			else
 				add_sphere(s, get_sphere(fd));
+		}
 	}
 	if (r == -1)
-			exit (-1);
+		exit (-1);
 	return (s);
 }
 

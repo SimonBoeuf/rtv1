@@ -13,14 +13,9 @@ t_sphere	*new_sphere(t_vect *center, double radius, t_color *color)
 
 void		add_sphere(t_sphere *start, t_sphere *new)
 {
-	if (start == NULL)
-		start = new;
-	else
-	{
-		while (start->next != NULL)
-			start = start->next;
-		start->next = new;
-	}
+	while (start->next != NULL)
+		start = start->next;
+	start->next = new;
 }
 
 void	delete_spheres(t_sphere **start)

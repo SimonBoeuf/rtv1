@@ -1,3 +1,4 @@
 *.o
 *.swp
 test_*.c
+rtv1

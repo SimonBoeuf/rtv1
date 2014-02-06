@@ -25,6 +25,7 @@ SRCS		= 		main.c			\
 				window.c			\
 				img_fct.c			\
 				draw.c				\
+				hook_fct.c			\
 
 OBJS		= $(SRCS:.c=.o)
 

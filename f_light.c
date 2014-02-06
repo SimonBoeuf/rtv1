@@ -10,7 +10,12 @@ t_light	*get_spots(int fd)
 	while ((r = get_next_line(fd, &line)) > 0 && ft_strcmp(line, "----------"))
 	{
 		if (!ft_strcmp("new:", line))
+		{
+			if (l == NULL)
+				l = get_spot(fd);
+			else
 				add_light(l, get_spot(fd));
+		}
 	}
 	if (r == -1)
 			exit (-1);

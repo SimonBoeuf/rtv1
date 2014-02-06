@@ -9,6 +9,8 @@ void	display_scene(void)
 
 	ft_draw_img();
 	mlx_put_image_to_window(window->mlx, window->win, window->img->img, 0, 0);
+	mlx_hook(window->win, 2, (1L << 0), ft_key_hook, window);
+	mlx_expose_hook(window->win, ft_expose_hook, window);
 	mlx_loop(window->mlx);
 }
 
@@ -33,11 +35,11 @@ void	init_scene(char *scene_file)
 		if (!ft_strcmp("camera:", line))
 				s->cam = get_camera(fd);
 		if (!ft_strcmp("spheres:", line))
-				s->spheres = get_spheres(fd);
+			s->spheres = get_spheres(fd);
 		if (!ft_strcmp("planes:", line))
-				s->planes = get_planes(fd);
+			s->planes = get_planes(fd);
 		if (!ft_strcmp("spots:", line))
-				s->lights = get_spots(fd);
+			s->lights = get_spots(fd);
 	}
 	if (ret == -1)
 			exit(-1);

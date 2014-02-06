@@ -50,3 +50,15 @@ t_color	*get_color(int fd)
 	s = ft_atodouble(&line);
 	return (new_color(r, g, b, s));
 }
+
+int		get_color_number(t_color *c)
+{
+	int	rslt;
+
+	rslt = c->red * 255;
+	rslt = rslt << 8;
+	rslt += c->green * 255;
+	rslt = rslt << 8;
+	rslt += c->blue * 255;
+	return (rslt);
+}

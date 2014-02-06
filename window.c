@@ -9,7 +9,7 @@ t_win			*init_env(void)
 		if (!(window = (t_win*)malloc(sizeof(t_win))))
 			exit(-1);
 		window->mlx = mlx_init();
-		window->win = mlx_new_window(window->mlx, WIN_WID, WIN_HEI, "Wolf 3D");
+		window->win = mlx_new_window(window->mlx, WD, HI, "RTV1");
 		window->img = init_img();
 	}
 	return (window);
