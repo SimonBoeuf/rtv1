@@ -4,7 +4,8 @@ NAME		= rtv1
 
 INCLUDE		= ./includes/
 
-SRCS		= 		main.c			\
+SRCS		= 	print.c				\
+				main.c				\
 				rtv1.c				\
 				camera.c			\
 				d_vect.c			\

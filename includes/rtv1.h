@@ -111,6 +111,17 @@ typedef struct		s_win
 }					t_win;
 
 /*
+** Debug print TODO remove
+*/
+void	print_scene(t_scene *s);
+void	print_camera(t_camera *c);
+void	print_light(t_light *l);
+void	print_plane(t_plane *p);
+void	print_sphere(t_sphere *s);
+void	print_vect(t_vect *v);
+void	print_color(t_color *c);
+
+/*
 ** Core
 */
 void		rtv1(char *file);

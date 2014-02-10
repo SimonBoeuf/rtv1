@@ -42,7 +42,7 @@ t_camera	*get_camera(int fd)
 	diff_btw = new_vector(c->campos->x - look_at->x, c->campos->y - look_at->y,
 					c->campos->z - look_at->z);
 	c->camdir = normalize(negative(diff_btw));
-	c->camright = crossProduct(new_vector(0, 1, 0), c->camdir);
+	c->camright = normalize(crossProduct(new_vector(0, 1, 0), c->camdir));
 	c->camdown = crossProduct(c->camright, c->camdir);
 	return (c);
 }

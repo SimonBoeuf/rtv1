@@ -4,8 +4,8 @@ t_vect	*normalize(t_vect *v1)
 {
 	t_vect	*v2;
 
-	v2 = new_vector(magnitude(v1) / v1->x, magnitude(v1) / v1->y,
-		magnitude(v1) / v1->z);
+	v2 = new_vector(v1->x / magnitude(v1),v1->y / magnitude(v1), v1->z /
+		magnitude(v1));
 	return (v2);
 }
 
