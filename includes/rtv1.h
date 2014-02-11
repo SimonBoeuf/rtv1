@@ -25,8 +25,8 @@
 
 # define KEYECHAP 65307
 
-# define WD 300
-# define HI 200
+# define WD 640
+# define HI 480
 
 # define AADEPTH 1
 # define AATHRESHOLD 0.1
