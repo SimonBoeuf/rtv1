@@ -7,6 +7,31 @@ t_vect		*getNormalAtSphere(t_sphere *sphere, t_vect *point)
 	return (v);
 }
 
+t_sphere	*findSpheresIntersection(t_ray *ray)
+{
+	double		mininter;
+	double		inter;
+	t_vect		*normal;
+	t_color		*c;
+	t_sphere	*s;
+
+	mininter = -1;
+	s = get_scene()->spheres;
+	while (s != NULL)
+	{
+		inter = findSphereIntersection(s, ray);
+		if (inter > ACCURACY && (inter < mininter || mininter == -1))
+		{
+			mininter = inter;
+			normal = getNormalAtSphere(s, vectAdd(ray->origin,
+									vectMult(ray->direction, inter)));
+			c = s->color;
+		}
+		s = s->next;
+	}
+	return (new_sphere(normal, mininter, c));
+}
+
 double		findSphereIntersection(t_sphere *s, t_ray *r)
 {
 	double	b;

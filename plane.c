@@ -24,6 +24,31 @@ void	add_plane(t_plane *start, t_plane *new)
 	}
 }
 
+t_plane	*findPlanesIntersection(t_ray *ray)
+{
+	double	mininter;
+	double	inter;
+	t_vect	*normal;
+	t_color	*c;
+	t_plane	*p;
+
+
+	mininter = -1;
+	p = get_scene()->planes;
+	while (p != NULL)
+	{
+		inter = findPlaneIntersection(p, ray);
+		if (inter > ACCURACY && (inter < mininter || mininter == -1))
+		{
+			mininter = inter;
+			normal = p->normal;
+			c = p->color;
+		}
+		p = p->next;
+	}
+	return (new_plane(normal, mininter, c));
+}
+
 double	findPlaneIntersection(t_plane *p, t_ray *ray)
 {
 	double	a;

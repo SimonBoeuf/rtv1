@@ -1,43 +1,84 @@
 #include "includes/rtv1.h"
+#include <stdio.h>
+
+void	correct_plane(t_color *c, t_ray *ray)
+{
+	int	square;
+
+	square = (int)floor(ray->origin->x) + (int)floor(ray->origin->z);
+	if (square % 2 == 0)
+	{
+		c->red = 0;
+		c->green = 0;
+		c->blue = 0;
+	}
+	else
+	{
+		c->red = 1;
+		c->green = 1;
+		c->blue = 1;
+	}
+}
+
+void	correct_sphere(t_color *c, t_ray *ray, t_vect *normal, double inter)
+{
+	t_vect	*reflection;
+	t_ray	*ref_ray;
+
+	reflection = vectAdd(negative(ray->direction),
+		vectMult(vectAdd(vectMult(normal, dotProduct(normal,
+						negative(ray->direction))), ray->direction), 2));
+	ref_ray = new_ray(ray->origin, reflection);
+	ref_ray = ref_ray;	
+	c = c;
+	ray = ray;
+	normal = normal;
+	inter = inter;
+}
+
+t_color	*correct(t_color *c, t_ray *ray, t_vect *normal, double inter)
+{
+	t_ray	*tmp;
+
+
+	tmp = new_ray(vectAdd(ray->origin, vectMult(ray->direction,
+										inter)), ray->direction);
+	if (c->special == 2)
+		correct_plane(c, tmp);
+	if (c->special >= 0 && c->special <= 1)
+		correct_sphere(c, tmp, normal, inter);
+	return (clip(colorScalar(AMBIENTLIGHT, c)));
+}
+
 t_color	*get_object_color(t_ray *ray)
 {
-	double		mininter;
-	double		inter;
-	t_color		*rslt;
 	t_sphere	*s;
 	t_plane		*p;
-
-	mininter = -1;
-	ray = ray;
+	t_vect		*normal;
+	t_color		*rslt;
 
 	rslt = new_color(0, 0, 0, 0);
-	s = get_scene()->spheres;
-	while (s != NULL)
+	s = findSpheresIntersection(ray);
+	p = findPlanesIntersection(ray);
+	if ((s->radius < p->distance || p->distance == -1) && s->radius > ACCURACY)
 	{
-		inter = findSphereIntersection(s, ray);
-		if (inter > 0 && (inter < mininter || mininter == -1))
-		{
-			mininter = inter;
-			if (mininter > ACCURACY)
-				rslt = s->color;
-		}
-		s = s->next;
+		normal = s->center;
+		rslt = s->color;
+		rslt = correct(rslt, ray, normal, s->radius);
+		printf("sphere wins : %f\n", s->radius);
 	}
-	p = get_scene()->planes;
-	while (p != NULL)
+	else if ((p->distance <= s->radius || s->radius == -1) && p->distance > ACCURACY)
 	{
-		inter = findPlaneIntersection(p, ray);
-		if (inter > 0 && (inter < mininter  - 1 || mininter == -1))
-		{
-			mininter = inter;
-			if (mininter > ACCURACY)
-				rslt = p->color;
-		}
-		p = p->next;
+		normal = p->normal;
+		rslt = p->color;
+		rslt = correct(rslt, ray, normal, p->distance);
+		printf("plane wins : %f\n", p->distance);
 	}
+			//printf("%f : %f : %f\n %f : %f : %f\n", ray->origin->x, ray->origin->y, ray->origin->z, ray->direction->x, ray->direction->y, ray->direction->z);
+			//printf("%f : %f : %f\n %f : %f : %f\n", tmp->origin->x, tmp->origin->y, tmp->origin->z, tmp->direction->x, tmp->direction->y, tmp->direction->z);
 	return (rslt);
 }
-#include <stdio.h>
+
 t_color	*get_color_at(int x, int y)
 {
 	t_color		*color;
@@ -50,7 +91,6 @@ t_color	*get_color_at(int x, int y)
 		/ (double) HI) / 2) : (x + 0.5) / WD;
 	yamnt = HI > WD ? (((HI - y) + 0.5) / HI) /	ASPECTRATIO -
 		(((HI - WD) / (double) WD) / 2) : ((HI - y) + 0.5) / HI;
-	//printf("x : %i, y : %i, xamnt : %f, yamnt : %f\n",x, y, xamnt, yamnt);
 	c = get_scene()->cam;
 	ray = new_ray(c->campos, normalize(vectAdd(c->camdir, vectAdd(vectMult(
 											c->camright, xamnt - 0.5),
@@ -72,13 +112,6 @@ void	ft_draw_img(void)
 		while (y < HI)
 		{
 			c = get_color_at(x, y);
-			printf("x : %d y : %d red : %f green : %f blue : %f special : %f\n",
-							x,
-							y,
-							c->red,
-							c->green,
-							c->blue,
-							c->special);
 			mlx_put_pixel_to_image(x, y, get_color_number(c));
 			y++;
 		}

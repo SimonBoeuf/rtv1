@@ -31,7 +31,7 @@
 # define AADEPTH 1
 # define AATHRESHOLD 0.1
 # define ASPECTRATIO ((double)WD / (double)HI)
-# define AMBIENTLIGHT 0.2
+# define AMBIENTLIGHT 0.8
 # define ACCURACY 0.00000001
 
 typedef struct		s_color
@@ -218,8 +218,10 @@ t_light		*get_spot(int fd);
 */
 t_plane		*new_plane(t_vect *normal, double distance, t_color *c);
 void		add_plane(t_plane *start, t_plane *new);
+t_plane		*findPlanesIntersection(t_ray *ray);
 double		findPlaneIntersection(t_plane *p, t_ray *ray);
 void		delete_planes(t_plane **p);
+
 t_plane		*get_planes(int fd);
 t_plane		*get_plane(int fd);
 
@@ -230,6 +232,7 @@ t_sphere	*new_sphere(t_vect *center, double radius, t_color *color);
 void		add_sphere(t_sphere *start, t_sphere *new);
 void		delete_spheres(t_sphere **s);
 
+t_sphere	*findSpheresIntersection(t_ray *r);
 double		findSphereIntersection(t_sphere *s, t_ray *r);
 t_vect		*getNormalAtSphere(t_sphere *sphere, t_vect *point);
 t_sphere	*get_spheres(int fd);
