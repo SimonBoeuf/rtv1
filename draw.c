@@ -20,20 +20,18 @@ void	correct_plane(t_color *c, t_ray *ray)
 	}
 }
 
-void	correct_sphere(t_color *c, t_ray *ray, t_vect *normal, double inter)
+void	correct_sphere(t_color *c, t_ray *ray, t_vect *normal)
 {
-	t_vect	*reflection;
-	t_ray	*ref_ray;
-
-	reflection = vectAdd(negative(ray->direction),
-		vectMult(vectAdd(vectMult(normal, dotProduct(normal,
-						negative(ray->direction))), ray->direction), 2));
-	ref_ray = new_ray(ray->origin, reflection);
-	ref_ray = ref_ray;	
-	c = c;
 	ray = ray;
+	c = c;
 	normal = normal;
-	inter = inter;
+}
+
+void	correct_light(t_color *c, t_ray *r, t_vect *n)
+{
+	c = c;
+	r = r;
+	n = n;
 }
 
 t_color	*correct(t_color *c, t_ray *ray, t_vect *normal, double inter)
@@ -46,7 +44,8 @@ t_color	*correct(t_color *c, t_ray *ray, t_vect *normal, double inter)
 	if (c->special == 2)
 		correct_plane(c, tmp);
 	if (c->special >= 0 && c->special <= 1)
-		correct_sphere(c, tmp, normal, inter);
+		correct_sphere(c, tmp, normal);
+	correct_light(c, ray, normal);
 	return (clip(colorScalar(AMBIENTLIGHT, c)));
 }
 
@@ -56,26 +55,27 @@ t_color	*get_object_color(t_ray *ray)
 	t_plane		*p;
 	t_vect		*normal;
 	t_color		*rslt;
+	t_ray		*iray;
 
 	rslt = new_color(0, 0, 0, 0);
 	s = findSpheresIntersection(ray);
 	p = findPlanesIntersection(ray);
 	if ((s->radius < p->distance || p->distance == -1) && s->radius > ACCURACY)
 	{
+		iray = new_ray(vectAdd(ray->origin, vectMult(ray->direction,
+										s->radius)), ray->direction);
 		normal = s->center;
 		rslt = s->color;
-		rslt = correct(rslt, ray, normal, s->radius);
-		printf("sphere wins : %f\n", s->radius);
+		rslt = correct(rslt, iray, normal, s->radius);
 	}
 	else if ((p->distance <= s->radius || s->radius == -1) && p->distance > ACCURACY)
 	{
+		iray = new_ray(vectAdd(ray->origin, vectMult(ray->direction,
+										p->distance)), ray->direction);
 		normal = p->normal;
 		rslt = p->color;
-		rslt = correct(rslt, ray, normal, p->distance);
-		printf("plane wins : %f\n", p->distance);
+		rslt = correct(rslt, iray, normal, p->distance);
 	}
-			//printf("%f : %f : %f\n %f : %f : %f\n", ray->origin->x, ray->origin->y, ray->origin->z, ray->direction->x, ray->direction->y, ray->direction->z);
-			//printf("%f : %f : %f\n %f : %f : %f\n", tmp->origin->x, tmp->origin->y, tmp->origin->z, tmp->direction->x, tmp->direction->y, tmp->direction->z);
 	return (rslt);
 }
 
