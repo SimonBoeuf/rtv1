@@ -1,33 +1,65 @@
 #include "includes/rtv1.h"
 #include <stdio.h>
 
-void	correct_plane(t_color *c, t_ray *iray)
+t_color	*correct_plane(t_color *c, t_ray *iray)
 {
-	int	square;
+	int		square;
+	t_color	*rslt;
 
+	c = c;
 	square = (int)floor(iray->origin->x) + (int)floor(iray->origin->z);
 	if (square % 2 == 0)
 	{
-		c->red = 0;
-		c->green = 0;
-		c->blue = 0;
+		rslt = new_color(0, 0, 0, c->special);
 	}
 	else
 	{
-		c->red = 1;
-		c->green = 1;
-		c->blue = 1;
+		rslt = new_color(c->red, c->green, c->blue, 2);
 	}
+	return (rslt);
 }
 
-void	correct_sphere(t_color *c, t_ray *r, t_vect *n)
+t_color	*correct_sphere(t_color *c, t_ray *r, t_vect *n)
 {
-	t_vect	*ref;
-	t_ray	*ray_ref;
+	t_light		*l;
+	float		cosine_angle;
+	t_vect		*dist_l;
+	t_ray		*shadow;
+	int			shadowed;
+	t_color		*rslt;
+	t_vect		*ref_dir;
+	double		specular;
 
-	c = colorScalar(AMBIENTLIGHT, c);
-	ref = normalize(vectMult(vectAdd(negative(r->direction), vectMult(n, dotProduct(n, negative(r->direction)))), 2));
-	ray_ref = new_ray(r->origin, ref);
+	rslt = colorScalar(AMBIENTLIGHT, c);
+	l = get_scene()->lights;
+	while (l != NULL)
+	{
+		dist_l = normalize(vectAdd(l->position, negative(r->origin)));
+		cosine_angle = dotProduct(n, dist_l);
+		if (cosine_angle > 0)
+		{
+			shadow = new_ray(r->origin, dist_l);
+			shadowed = 0;
+			if (findSpheresIntersection(shadow)->radius > ACCURACY || findPlanesIntersection(shadow)->distance > ACCURACY)
+				shadowed = 1;
+			if (!shadowed)
+			{
+				rslt = colorAdd(rslt, colorScalar(cosine_angle, colorMultiply(c,
+								l->color)));
+				if (c->special > 0 && c->special <= 1)
+				{
+					ref_dir = normalize(vectAdd(negative(r->direction), vectMult(vectAdd(vectMult(n, dotProduct(n, r->direction)),r->direction), 2)));
+					specular = dotProduct(ref_dir, dist_l);
+					if (specular > 0)
+					{
+						specular = pow(specular, 10);
+						rslt = colorAdd(rslt, colorScalar(specular * c->special, l->color));
+					}
+				}
+			}
+		}
+		l = l->next;
+	}
 	/*
 	printf("%f, %f, %f : %f, %f, %f\n",
 					r->origin->x,
@@ -37,7 +69,7 @@ void	correct_sphere(t_color *c, t_ray *r, t_vect *n)
 					r->direction->y,
 					r->direction->z);
 	// */
-	ray_ref = ray_ref;
+	return (rslt);
 }
 
 void	correct_light(t_color *c, t_ray *r, t_vect *n)
@@ -64,11 +96,11 @@ t_color	*correct(t_color *c, t_ray *ray, t_vect *normal, double inter)
 					iray->direction->z);
 	*/
 	if (c->special == 2)
-		correct_plane(c, iray);
+		c = correct_plane(c, iray);
 	if (c->special >= 0 && c->special <= 1)
-		correct_sphere(c, iray, normal);
+		c = correct_sphere(c, iray, normal);
 	correct_light(c, iray, normal);
-	return (clip(colorScalar(AMBIENTLIGHT, c)));
+	return (clip(c));
 }
 
 t_color	*get_object_color(t_ray *ray)
@@ -97,7 +129,7 @@ t_color	*get_object_color(t_ray *ray)
 		rslt = s->color;
 		rslt = correct(rslt, ray, normal, s->radius);
 	}
-	else if ((p->distance <= s->radius || s->radius == -1) && p->distance > ACCURACY)
+	if ((p->distance <= s->radius || s->radius == -1) && p->distance > ACCURACY)
 	{
 		//printf("%f\n", p->distance);
 		normal = p->normal;
@@ -117,8 +149,8 @@ t_color	*get_color_at(int x, int y)
 
 	xamnt = WD > HI ? ((x + 0.5) / WD) * ASPECTRATIO - (((WD - HI)
 		/ (double) HI) / 2) : (x + 0.5) / WD;
-	yamnt = HI > WD ? (((HI - y) + 0.5) / HI) /	ASPECTRATIO -
-		(((HI - WD) / (double) WD) / 2) : ((HI - y) + 0.5) / HI;
+	yamnt = HI > WD ? ((y + 0.5) / HI) /	ASPECTRATIO -
+		(((HI - WD) / (double) WD) / 2) : (y + 0.5) / HI;
 	c = get_scene()->cam;
 	ray = new_ray(c->campos, normalize(vectAdd(c->camdir, vectAdd(vectMult(
 											c->camright, xamnt - 0.5),

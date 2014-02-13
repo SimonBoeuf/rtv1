@@ -6,7 +6,7 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/01/30 17:38:11 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/01/30 18:07:52 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/13 13:23:56 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <math.h>
-# include <mlx/mlx.h>
+# include <mlx.h>
 # include "libft/includes/libft.h"
 
 # define BUFF_SIZE 32
