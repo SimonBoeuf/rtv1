@@ -31,7 +31,7 @@
 # define AADEPTH 1
 # define AATHRESHOLD 0.1
 # define ASPECTRATIO ((double)WD / (double)HI)
-# define AMBIENTLIGHT 0.8
+# define AMBIENTLIGHT 0.2
 # define ACCURACY 0.00000001
 
 typedef struct		s_color

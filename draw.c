@@ -1,11 +1,11 @@
 #include "includes/rtv1.h"
 #include <stdio.h>
 
-void	correct_plane(t_color *c, t_ray *ray)
+void	correct_plane(t_color *c, t_ray *iray)
 {
 	int	square;
 
-	square = (int)floor(ray->origin->x) + (int)floor(ray->origin->z);
+	square = (int)floor(iray->origin->x) + (int)floor(iray->origin->z);
 	if (square % 2 == 0)
 	{
 		c->red = 0;
@@ -20,11 +20,24 @@ void	correct_plane(t_color *c, t_ray *ray)
 	}
 }
 
-void	correct_sphere(t_color *c, t_ray *ray, t_vect *normal)
+void	correct_sphere(t_color *c, t_ray *r, t_vect *n)
 {
-	ray = ray;
-	c = c;
-	normal = normal;
+	t_vect	*ref;
+	t_ray	*ray_ref;
+
+	c = colorScalar(AMBIENTLIGHT, c);
+	ref = normalize(vectMult(vectAdd(negative(r->direction), vectMult(n, dotProduct(n, negative(r->direction)))), 2));
+	ray_ref = new_ray(r->origin, ref);
+	/*
+	printf("%f, %f, %f : %f, %f, %f\n",
+					r->origin->x,
+					r->origin->y,
+					r->origin->z,
+					r->direction->x,
+					r->direction->y,
+					r->direction->z);
+	// */
+	ray_ref = ray_ref;
 }
 
 void	correct_light(t_color *c, t_ray *r, t_vect *n)
@@ -36,16 +49,25 @@ void	correct_light(t_color *c, t_ray *r, t_vect *n)
 
 t_color	*correct(t_color *c, t_ray *ray, t_vect *normal, double inter)
 {
-	t_ray	*tmp;
+	t_ray	*iray;
 
 
-	tmp = new_ray(vectAdd(ray->origin, vectMult(ray->direction,
+	iray = new_ray(vectAdd(ray->origin, vectMult(ray->direction,
 										inter)), ray->direction);
+	/*
+	printf("%f, %f, %f : %f, %f, %f\n",
+					iray->origin->x,
+					iray->origin->y,
+					iray->origin->z,
+					iray->direction->x,
+					iray->direction->y,
+					iray->direction->z);
+	*/
 	if (c->special == 2)
-		correct_plane(c, tmp);
+		correct_plane(c, iray);
 	if (c->special >= 0 && c->special <= 1)
-		correct_sphere(c, tmp, normal);
-	correct_light(c, ray, normal);
+		correct_sphere(c, iray, normal);
+	correct_light(c, iray, normal);
 	return (clip(colorScalar(AMBIENTLIGHT, c)));
 }
 
@@ -55,26 +77,32 @@ t_color	*get_object_color(t_ray *ray)
 	t_plane		*p;
 	t_vect		*normal;
 	t_color		*rslt;
-	t_ray		*iray;
 
+	/*
+	printf("%f, %f, %f : %f, %f, %f\n",
+					ray->origin->x,
+					ray->origin->y,
+					ray->origin->z,
+					ray->direction->x,
+					ray->direction->y,
+					ray->direction->z);
+	*/
 	rslt = new_color(0, 0, 0, 0);
 	s = findSpheresIntersection(ray);
 	p = findPlanesIntersection(ray);
 	if ((s->radius < p->distance || p->distance == -1) && s->radius > ACCURACY)
 	{
-		iray = new_ray(vectAdd(ray->origin, vectMult(ray->direction,
-										s->radius)), ray->direction);
+		//printf("%f\n", s->radius);
 		normal = s->center;
 		rslt = s->color;
-		rslt = correct(rslt, iray, normal, s->radius);
+		rslt = correct(rslt, ray, normal, s->radius);
 	}
 	else if ((p->distance <= s->radius || s->radius == -1) && p->distance > ACCURACY)
 	{
-		iray = new_ray(vectAdd(ray->origin, vectMult(ray->direction,
-										p->distance)), ray->direction);
+		//printf("%f\n", p->distance);
 		normal = p->normal;
 		rslt = p->color;
-		rslt = correct(rslt, iray, normal, p->distance);
+		rslt = correct(rslt, ray, normal, p->distance);
 	}
 	return (rslt);
 }
