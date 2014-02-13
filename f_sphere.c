@@ -44,7 +44,7 @@ double		findSphereIntersection(t_sphere *s, t_ray *r)
 		(2 * (r->origin->z - s->center->z) * r->direction->z);
 	c = pow(r->origin->x - s->center->x, 2) +
 		pow(r->origin->y - s->center->y, 2) +
-		pow(r->origin->z - s->center->z, 2) - s->radius * s->radius;
+		pow(r->origin->z - s->center->z, 2) - (s->radius * s->radius);
 	d = b * b - 4 * c;
 	if (d > 0)
 	{

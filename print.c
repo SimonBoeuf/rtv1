@@ -11,7 +11,7 @@ void	print_scene(t_scene *s)
 	ft_putendl("scene :\ncamera :");
 	print_camera(s->cam);
 	ft_putendl("lights :");
-	i = 48;
+	i = 0;
 	tmpl = s->lights;
 	while (tmpl != NULL)
 	{
@@ -20,7 +20,7 @@ void	print_scene(t_scene *s)
 		tmpl = tmpl->next;
 	}
 	ft_putendl("planes :");
-	i = 48;
+	i = 0;
 	tmpp = s->planes;
 	while (tmpp != NULL)
 	{
@@ -29,7 +29,7 @@ void	print_scene(t_scene *s)
 		tmpp = tmpp->next;
 	}
 	ft_putendl("\nspheres :");
-	i = 48;
+	i = 0;
 	tmps = s->spheres;
 	while (tmps != NULL)
 	{

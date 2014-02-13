@@ -54,14 +54,14 @@ double	findPlaneIntersection(t_plane *p, t_ray *ray)
 	double	a;
 	double	b;
 
-	a = dotProduct(ray->direction, p->normal);
+	a = dotProduct(p->normal, ray->direction);
 	if (a == 0)
 		return (-1);
 	else
 	{
-		b = dotProduct(p->normal, vectAdd(ray->origin, negative(
-					vectMult(p->normal, p->distance))));
-		return (-1 * b / a);
+		b = dotProduct(p->normal, vectAdd(ray->origin,
+					negative(vectMult(p->normal, p->distance))));
+		return (-b / a);
 	}
 }
 

@@ -3,9 +3,12 @@
 t_vect	*normalize(t_vect *v1)
 {
 	t_vect	*v2;
+	double	m;
 
-	v2 = new_vector(v1->x / magnitude(v1),v1->y / magnitude(v1), v1->z /
-		magnitude(v1));
+	m = magnitude(v1);
+	v2 = new_vector(v1->x / m,
+					v1->y / m,
+					v1->z / m);
 	return (v2);
 }
 
@@ -13,7 +16,7 @@ t_vect	*negative(t_vect *v1)
 {
 	t_vect *v2;
 
-	v2 = new_vector(-v1->x, -v1->y, -v1->z);
+	v2 = new_vector(v1->x * -1, v1->y * -1, v1->z * -1);
 	return (v2);
 }
 
@@ -22,7 +25,8 @@ t_vect	*crossProduct(t_vect *v1, t_vect *v2)
 	t_vect *rslt;
 
 	rslt = new_vector(v1->y * v2->z - v1->z * v2->y,
-		v1->z * v2->x - v1->x * v2->z, v1->x * v2->y - v1->y * v2->x);
+						v1->z * v2->x - v1->x * v2->z,
+						v1->x * v2->y - v1->y * v2->x);
 	return (rslt);
 }
 
