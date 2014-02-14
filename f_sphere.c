@@ -3,7 +3,7 @@
 t_vect		*getNormalAtSphere(t_sphere *sphere, t_vect *point)
 {
 	t_vect	*v;
-	v = vectAdd(point, negative(normalize(sphere->center)));
+	v = normalize(vectAdd(point, negative(sphere->center)));
 	return (v);
 }
 
@@ -48,9 +48,9 @@ double		findSphereIntersection(t_sphere *s, t_ray *r)
 	d = b * b - 4 * c;
 	if (d > 0)
 	{
-		rslt = (-b - sqrt(d) / 2) - 0.000001 > 0 ?
-			-b - sqrt(d) / 2 - 0.000001 :
-			-b + sqrt(d) / 2 - 0.000001;
+		rslt = ((-b - sqrt(d)) / 2) - 0.000001 > 0 ?
+			(-b - sqrt(d)) / 2 - 0.000001 :
+			(-b + sqrt(d)) / 2 - 0.000001;
 	}
 	else
 		rslt = -1;

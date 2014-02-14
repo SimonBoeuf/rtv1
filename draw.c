@@ -72,7 +72,7 @@ t_color	*correct_light(t_color *c, t_ray *r, t_vect *n)
 			if (!shadowed)
 			{
 				rslt = colorAdd(rslt, colorScalar(cosine_angle, colorMultiply(c,
-								l->color)));
+												l->color)));
 				if (c->special > 0 && c->special <= 1)
 				{
 					ref_dir = get_ref_ray(n, r)->direction;
@@ -90,26 +90,43 @@ t_color	*correct_light(t_color *c, t_ray *r, t_vect *n)
 	return (rslt);
 }
 
+t_color	*correct(t_color *c, t_ray *ray, t_vect *normal, double inter);
+t_color	*reflection(t_color *c, t_ray *r, t_vect *normal)
+{
+	t_ray		*ref;
+	t_sphere	*s;
+	t_plane		*p;
+	t_color		*rslt;
+	t_ray		*ref_inter_ray;
+
+	ref = get_ref_ray(normal, r);
+	s = findSpheresIntersection(ref);
+	p = findPlanesIntersection(ref);
+	if ((s->radius < p->distance || p->distance == -1) && s->radius > ACCURACY)
+	{
+		ref_inter_ray = new_ray(vectAdd(r->origin, vectMult(ref->direction, s->radius)), ref->direction);
+		rslt = reflection(c, ref_inter_ray, s->center);
+	}
+	else if ((p->distance <= s->radius || s->radius == -1) && p->distance > ACCURACY)
+	{
+		ref_inter_ray = new_ray(vectAdd(r->origin, vectMult(ref->direction, p->distance)), ref->direction);
+		rslt = correct_plane(c, ref_inter_ray);
+	}
+	else
+		rslt = c;
+	return (rslt);
+}
+
 t_color	*correct(t_color *c, t_ray *ray, t_vect *normal, double inter)
 {
 	t_ray	*iray;
 
-
 	iray = new_ray(vectAdd(ray->origin, vectMult(ray->direction,
 										inter)), ray->direction);
-	/*
-	printf("%f, %f, %f : %f, %f, %f\n",
-					iray->origin->x,
-					iray->origin->y,
-					iray->origin->z,
-					iray->direction->x,
-					iray->direction->y,
-					iray->direction->z);
-	*/
 	if (c->special == 2)
 		c = correct_plane(c, iray);
 	if (c->special >= 0 && c->special <= 1)
-		c = correct_sphere(c, iray, normal);
+		c = reflection(c, iray, normal);
 	c = correct_light(c, iray, normal);
 	return (clip(c));
 }
@@ -119,7 +136,15 @@ t_color	*get_object_color(t_ray *ray)
 	t_sphere	*s;
 	t_plane		*p;
 	t_color		*rslt;
-
+	/*
+	printf("%f, %f, %f : %f, %f, %f\n",
+					ray->origin->x,
+					ray->origin->y,
+					ray->origin->z,
+					ray->direction->x,
+					ray->direction->y,
+					ray->direction->z);
+					*/
 	rslt = new_color(0, 0, 0, 0);
 	s = findSpheresIntersection(ray);
 	p = findPlanesIntersection(ray);
@@ -163,7 +188,7 @@ void	ft_draw_img(void)
 		while (y < HI)
 		{
 			c = get_color_at(x, y);
-			mlx_put_pixel_to_image(x, y, get_color_number(c));
+			mlx_put_pixel_to_image(x, HI - y, get_color_number(c));
 			y++;
 		}
 		x++;
