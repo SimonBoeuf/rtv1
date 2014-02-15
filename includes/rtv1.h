@@ -30,85 +30,94 @@
 
 # define AADEPTH 1
 # define AATHRESHOLD 0.1
-# define ASPECTRATIO ((double)WD / (double)HI)
+# define ASPR ((double)WD / (double)HI)
 # define AMBIENTLIGHT 0.2
 # define ACCURACY 0.00000001
 
-typedef struct		s_color
+typedef struct			s_img
 {
-	double			red;
-	double			green;
-	double			blue;
-	double			special;
-}					t_color;
+	void				*img;
+	char				*data;
+	int					bbp;
+	int					size_line;
+	int					endian;
+}						t_img;
 
-typedef struct		s_vect
+typedef struct			s_win
 {
-	double			x;
-	double			y;
-	double			z;
-}					t_vect;
+	void				*mlx;
+	void				*win;
+	t_img				*img;
+}						t_win;
 
-typedef struct		s_ray
+typedef struct			s_color
 {
-	t_vect			*origin;
-	t_vect			*direction;
-}					t_ray;
+	double				red;
+	double				green;
+	double				blue;
+	double				special;
+}						t_color;
 
-typedef struct		 s_camera
+typedef struct			s_vect
 {
-	t_vect			*campos;
-	t_vect			*camdir;
-	t_vect			*camright;
-	t_vect			*camdown;
-}					t_camera;
+	double				x;
+	double				y;
+	double				z;
+}						t_vect;
 
-typedef struct		s_light
+typedef struct			s_ray
 {
-	t_vect			*position;
-	t_color			*color;
-	struct s_light	*next;
-}					t_light;
+	t_vect				*origin;
+	t_vect				*direction;
+}						t_ray;
 
-typedef struct		s_plane
+typedef struct			 s_camera
 {
-	t_vect			*normal;
-	double			distance;
-	t_color			*color;
-	struct s_plane	*next; 
-}					t_plane;
+	t_vect				*campos;
+	t_vect				*camdir;
+	t_vect				*camright;
+	t_vect				*camdown;
+}						t_camera;
 
-typedef struct		s_sphere
+typedef struct			s_light
 {
-	t_vect			*center;
-	double			radius;
-	t_color			*color;
-	struct s_sphere	*next;
-}					t_sphere;
+	t_vect				*position;
+	t_color				*color;
+	struct s_light		*next;
+}						t_light;
 
-typedef struct		s_scene
+typedef struct			s_plane
 {
-	t_camera	*cam;
-	t_light		*lights;
-	t_plane		*planes;
-	t_sphere	*spheres;
-}					t_scene;
+	t_vect				*normal;
+	double				distance;
+	t_color				*color;
+	struct s_plane		*next; 
+}						t_plane;
 
-typedef struct		s_img
+typedef struct			s_sphere
 {
-	void		*img;
-	char		*data;
-	int			bbp;
-	int			size_line;
-	int			endian;
-}					t_img;
+	t_vect				*center;
+	double				radius;
+	t_color				*color;
+	struct s_sphere		*next;
+}						t_sphere;
 
-typedef struct		s_win
+typedef struct			s_cylinder
 {
-	void		*mlx;
-	void		*win;
-	t_img		*img;
-}					t_win;
+	t_vect				*center;
+	double				radius;
+	t_color				*color;
+	struct s_cylinder	*next;
+}						t_cylinder;
+
+typedef struct			s_scene
+{
+	t_camera			*cam;
+	t_light				*lights;
+	t_plane				*planes;
+	t_sphere			*spheres;
+	t_cylinder			*cylinders;
+}						t_scene;
 
 /*
 ** Debug print TODO remove
@@ -116,6 +125,7 @@ typedef struct		s_win
 void	print_scene(t_scene *s);
 void	print_camera(t_camera *c);
 void	print_light(t_light *l);
+void	print_ray(t_ray *r);
 void	print_plane(t_plane *p);
 void	print_sphere(t_sphere *s);
 void	print_vect(t_vect *v);
@@ -164,7 +174,7 @@ double		ft_atodouble(char **s);
 */
 t_color		*new_color(double red, double green, double blue, double special);
 void		delete_color(t_color *c);
-double		brightness(t_color *c);
+t_color		*cpy_color(t_color *c);
 t_color		*get_color(int fd);
 int			get_color_number(t_color *c);
 
@@ -180,6 +190,7 @@ t_color		*clip(t_color *c1);
 t_vect		*new_vector(double x, double y, double z);
 void		delete_vect(t_vect *v);
 t_vect		*get_vector(int fd);
+t_vect		*cpy_vect(t_vect *v);
 
 t_vect		*normalize(t_vect *v1);
 t_vect		*negative(t_vect *v1);
@@ -201,6 +212,7 @@ t_camera	*get_camera(int fd);
 ** Ray
 */
 t_ray		*new_ray(t_vect *o, t_vect *d);
+t_ray		*cpy_ray(t_ray *r);
 void		delete_ray(t_ray *r);
 
 /*
@@ -237,6 +249,19 @@ double		findSphereIntersection(t_sphere *s, t_ray *r);
 t_vect		*getNormalAtSphere(t_sphere *sphere, t_vect *point);
 t_sphere	*get_spheres(int fd);
 t_sphere	*get_sphere(int fd);
+
+/*
+** Cylinder
+*/
+t_cylinder	*new_cylinder(t_vect *center, double radius, t_color *color);
+void		add_cylinder(t_cylinder *start, t_cylinder *new);
+void		delete_cylinders(t_cylinder **s);
+
+t_cylinder	*findCylindersIntersection(t_ray *r);
+double		findCylinderIntersection(t_cylinder *c, t_ray *r);
+t_vect		*getNormalAtCylinder(t_cylinder *c, t_vect *point);
+t_cylinder	*get_cylinders(int fd);
+t_cylinder	*get_cylinder(int fd);
 
 /*
 ** Scene

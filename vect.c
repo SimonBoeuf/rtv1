@@ -16,6 +16,11 @@ void	delete_vect(t_vect *v)
 	free(v);
 }
 
+t_vect	*cpy_vect(t_vect *v)
+{
+	return (new_vector(v->x, v->y, v->z));
+}
+
 t_vect	*get_vector(int fd)
 {
 	double	x;

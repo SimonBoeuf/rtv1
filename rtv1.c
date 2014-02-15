@@ -37,11 +37,11 @@ void	init_scene(char *scene_file)
 		if (!ft_strcmp("spheres:", line))
 			s->spheres = get_spheres(fd);
 		if (!ft_strcmp("planes:", line))
-			{
-				s->planes = get_planes(fd);
-			}
+			s->planes = get_planes(fd);
 		if (!ft_strcmp("spots:", line))
 			s->lights = get_spots(fd);
+		if (!ft_strcmp("cylinders:", line))
+			s->cylinders = get_cylinders(fd);
 	}
 	if (ret == -1)
 			exit(-1);

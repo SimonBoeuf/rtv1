@@ -27,6 +27,8 @@ SRCS		= 	print.c				\
 				img_fct.c			\
 				draw.c				\
 				hook_fct.c			\
+				cylinder.c			\
+				f_cylinder.c		\
 
 OBJS		= $(SRCS:.c=.o)
 

@@ -29,9 +29,9 @@ void	delete_color(t_color *c)
 	free(c);
 }
 
-double	brightness(t_color *c)
+t_color	*cpy_color(t_color *c)
 {
-	return ((c->red + c->green + c->blue) / 3);
+	return (new_color(c->red, c->green, c->blue, c->special));
 }
 
 t_color	*get_color(int fd)

@@ -59,6 +59,17 @@ void	print_light(t_light *l)
 	print_color(l->color);
 }
 
+void	print_ray(t_ray *r)
+{
+	printf("%f, %f, %f : %f, %f, %f\n",
+		r->origin->x,
+		r->origin->y,
+		r->origin->z,
+		r->direction->x,
+		r->direction->y,
+		r->direction->z);
+}
+
 void	print_plane(t_plane *p)
 {
 	ft_putendl("normal :");

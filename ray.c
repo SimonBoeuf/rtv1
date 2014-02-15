@@ -10,6 +10,11 @@ t_ray	*new_ray(t_vect *o, t_vect *d)
 	return (r);
 }
 
+t_ray	*cpy_ray(t_ray *r)
+{
+	return (new_ray(r->origin, r->direction));
+}
+
 void	delete_ray(t_ray *r)
 {
 	delete_vect(r->origin);

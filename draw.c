@@ -1,31 +1,19 @@
 #include "includes/rtv1.h"
 #include <stdio.h>
 
-t_color	*correct_plane(t_color *c, t_ray *iray)
+t_color	*square_plane(t_color *c, t_ray *iray)
 {
 	int		square;
 	t_color	*rslt;
 
-	c = c;
 	square = (int)floor(iray->origin->x) + (int)floor(iray->origin->z);
 	if (square % 2 == 0)
-	{
 		rslt = new_color(0, 0, 0, c->special);
-	}
 	else
-	{
-		rslt = new_color(c->red, c->green, c->blue, 2);
-	}
+		rslt = new_color(c->red, c->green, c->blue, c->special);
 	return (rslt);
 }
 
-t_color	*correct_sphere(t_color *c, t_ray *r, t_vect *n)
-{
-	c = c;
-	r = r;
-	n = n;
-	return (c);
-}
 t_ray	*get_ref_ray(t_vect *n, t_ray *r)
 {
 	t_ray	*ref_ray;
@@ -34,15 +22,14 @@ t_ray	*get_ref_ray(t_vect *n, t_ray *r)
 	t_vect	*add1;
 	t_vect	*add2;
 
-	scalar1 = vectMult(n, dotProduct(n, negative(r->direction)));
+	scalar1 = negative(r->direction);
+	scalar1 = vectMult(n, dotProduct(n, scalar1));
 	add1 = vectAdd(scalar1, r->direction);
 	scalar2 = vectMult(add1, 2);
-	add2 = vectAdd(negative(r->direction), scalar2);
-	ref_ray = new_ray(r->origin, normalize(add2));
-	free(scalar1);
-	free(add1);
-	free(scalar2);
-	free(add2);
+	scalar1 = negative(r->direction);
+	add2 = vectAdd(scalar1, scalar2);
+	scalar1 = normalize(add2);
+	ref_ray = new_ray(cpy_vect(r->origin), cpy_vect(scalar1));
 	return (ref_ray);
 }
 
@@ -79,7 +66,7 @@ t_color	*correct_light(t_color *c, t_ray *r, t_vect *n)
 					specular = dotProduct(ref_dir, dist_l);
 					if (specular > 0)
 					{
-						specular = pow(specular, 10);
+						specular = pow(specular, 100);
 						rslt = colorAdd(rslt, colorScalar(specular * c->special, l->color));
 					}
 				}
@@ -90,7 +77,17 @@ t_color	*correct_light(t_color *c, t_ray *r, t_vect *n)
 	return (rslt);
 }
 
-t_color	*correct(t_color *c, t_ray *ray, t_vect *normal, double inter);
+t_ray	*get_intersection_ray(t_ray *r, double inter)
+{
+	t_vect	*v;
+	t_ray	*rslt;
+
+	v = vectMult(r->direction, inter);
+	v = vectAdd(r->origin, v);
+	rslt = new_ray(cpy_vect(v), cpy_vect(r->direction));
+	return (rslt);
+}
+
 t_color	*reflection(t_color *c, t_ray *r, t_vect *normal)
 {
 	t_ray		*ref;
@@ -104,13 +101,18 @@ t_color	*reflection(t_color *c, t_ray *r, t_vect *normal)
 	p = findPlanesIntersection(ref);
 	if ((s->radius < p->distance || p->distance == -1) && s->radius > ACCURACY)
 	{
-		ref_inter_ray = new_ray(vectAdd(r->origin, vectMult(ref->direction, s->radius)), ref->direction);
-		rslt = reflection(c, ref_inter_ray, s->center);
+		ref_inter_ray = get_intersection_ray(ref, s->radius);
+		if (s->color->special > 0 && s->color->special <= 1)
+			rslt = reflection(s->color, ref_inter_ray, s->center);
+		else
+			rslt = c;
+		rslt = colorAdd(c, colorScalar(rslt->special, rslt));
 	}
 	else if ((p->distance <= s->radius || s->radius == -1) && p->distance > ACCURACY)
 	{
-		ref_inter_ray = new_ray(vectAdd(r->origin, vectMult(ref->direction, p->distance)), ref->direction);
-		rslt = correct_plane(c, ref_inter_ray);
+		ref_inter_ray = get_intersection_ray(ref, p->distance);
+		rslt = square_plane(c, ref_inter_ray);
+		rslt = colorAdd(c, colorScalar(rslt->special, rslt));
 	}
 	else
 		rslt = c;
@@ -121,11 +123,10 @@ t_color	*correct(t_color *c, t_ray *ray, t_vect *normal, double inter)
 {
 	t_ray	*iray;
 
-	iray = new_ray(vectAdd(ray->origin, vectMult(ray->direction,
-										inter)), ray->direction);
+	iray = get_intersection_ray(ray, inter);
 	if (c->special == 2)
-		c = correct_plane(c, iray);
-	if (c->special >= 0 && c->special <= 1)
+		c = square_plane(c, iray);
+	if (c->special > 0 && c->special <= 1)
 		c = reflection(c, iray, normal);
 	c = correct_light(c, iray, normal);
 	return (clip(c));
@@ -136,22 +137,51 @@ t_color	*get_object_color(t_ray *ray)
 	t_sphere	*s;
 	t_plane		*p;
 	t_color		*rslt;
-	/*
-	printf("%f, %f, %f : %f, %f, %f\n",
-					ray->origin->x,
-					ray->origin->y,
-					ray->origin->z,
-					ray->direction->x,
-					ray->direction->y,
-					ray->direction->z);
-					*/
-	rslt = new_color(0, 0, 0, 0);
+
 	s = findSpheresIntersection(ray);
 	p = findPlanesIntersection(ray);
 	if ((s->radius < p->distance || p->distance == -1) && s->radius > ACCURACY)
 		rslt = correct(s->color, ray, s->center, s->radius);
-	if ((p->distance <= s->radius || s->radius == -1) && p->distance > ACCURACY)
+	else if ((p->distance <= s->radius || s->radius == -1) && p->distance > ACCURACY)
 		rslt = correct(p->color, ray, p->normal, p->distance);
+	else
+		rslt = new_color(0, 0, 0, 0);
+	return (rslt);
+}
+
+t_ray	*get_ray(t_camera *c, double x, double y)
+{
+	t_vect	*v1;
+	t_vect	*v2;
+	t_ray	*rslt;
+
+	v1 = vectMult(c->camright, x - 0.5);
+	v2 = vectMult(c->camdown, y - 0.5);
+	v1 = vectAdd(v1, v2);
+	v1 = vectAdd(c->camdir, v1);
+	v1 = normalize(v1);
+
+	rslt = new_ray(c->campos, v1);
+	return (rslt);
+}
+
+double	get_x_point(int x)
+{
+	double	rslt;
+	if (WD > HI)
+		rslt = ((x + 0.5) / WD) * ASPR - (((WD - HI) / (double) HI) / 2);
+	else
+		rslt = (x + 0.5) / (double) WD;
+	return (rslt);
+}
+
+double	get_y_point(int y)
+{
+	double	rslt;
+	if (HI > WD)
+		rslt = ((y + 0.5) / HI) / ASPR - (((HI - WD) / (double) WD) / 2);
+	else
+		rslt = (y + 0.5) / HI;
 	return (rslt);
 }
 
@@ -163,14 +193,10 @@ t_color	*get_color_at(int x, int y)
 	t_ray		*ray;
 	t_camera	*c;
 
-	xamnt = WD > HI ? ((x + 0.5) / WD) * ASPECTRATIO - (((WD - HI)
-		/ (double) HI) / 2) : (x + 0.5) / WD;
-	yamnt = HI > WD ? ((HI - y + 0.5) / HI) / ASPECTRATIO -
-		(((HI - WD) / (double) WD) / 2) : (HI - y + 0.5) / HI;
+	xamnt = get_x_point(x);
+	yamnt = get_y_point(y);
 	c = get_scene()->cam;
-	ray = new_ray(c->campos, normalize(vectAdd(c->camdir, vectAdd(vectMult(
-											c->camright, xamnt - 0.5),
-										vectMult(c->camdown, yamnt - 0.5)))));
+	ray = get_ray(c, xamnt, yamnt);
 	color = get_object_color(ray);
 	return (color);
 }
@@ -188,7 +214,7 @@ void	ft_draw_img(void)
 		while (y < HI)
 		{
 			c = get_color_at(x, y);
-			mlx_put_pixel_to_image(x, HI - y, get_color_number(c));
+			mlx_put_pixel_to_image(x, y, get_color_number(c));
 			y++;
 		}
 		x++;
