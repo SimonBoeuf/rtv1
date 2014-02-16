@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vect.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2014/02/16 19:21:19 by sboeuf            #+#    #+#             */
+/*   Updated: 2014/02/16 19:50:35 by sboeuf           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/rtv1.h"
 
 t_vect	*new_vector(double x, double y, double z)
@@ -28,7 +40,7 @@ t_vect	*get_vector(int fd)
 	double	z;
 	char	*line;
 
-	if(get_next_line(fd, &line) < 1)
+	if (get_next_line(fd, &line) < 1)
 			exit(-1);
 	x = ft_atodouble(&line);
 	y = ft_atodouble(&line);

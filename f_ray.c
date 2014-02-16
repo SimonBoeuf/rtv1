@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   f_ray.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2014/02/16 19:18:07 by sboeuf            #+#    #+#             */
+/*   Updated: 2014/02/16 19:44:10 by sboeuf           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/rtv1.h"
 
 t_ray	*get_intersection_ray(t_ray *r, double inter)
@@ -41,7 +53,6 @@ t_ray	*get_ray(t_camera *c, double x, double y)
 	v1 = vectAdd(v1, v2);
 	v1 = vectAdd(c->camdir, v1);
 	v1 = normalize(v1);
-
 	rslt = new_ray(c->campos, v1);
 	return (rslt);
 }

@@ -6,7 +6,7 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/02/16 15:07:00 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 17:45:54 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/16 19:48:41 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ t_inter		*new_inter(t_vect *n, double dist, t_color *c)
 	i->normal = n;
 	i->dist = dist;
 	i->c = c;
-
 	return (i);
 }
 

@@ -6,7 +6,7 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/01/30 17:38:11 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 18:40:10 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/16 19:48:26 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef struct			s_color
 	double				red;
 	double				green;
 	double				blue;
-	double				special;
+	double				spec;
 }						t_color;
 
 typedef struct			s_vect
@@ -71,7 +71,7 @@ typedef struct			s_ray
 	t_vect				*direction;
 }						t_ray;
 
-typedef struct			 s_camera
+typedef struct			s_camera
 {
 	t_vect				*campos;
 	t_vect				*camdir;
@@ -89,7 +89,7 @@ typedef struct			s_inter
 typedef struct			s_light
 {
 	t_vect				*position;
-	t_color				*color;
+	t_color				*c;
 	struct s_light		*next;
 }						t_light;
 
@@ -98,7 +98,7 @@ typedef struct			s_plane
 	t_vect				*normal;
 	double				distance;
 	t_color				*color;
-	struct s_plane		*next; 
+	struct s_plane		*next;
 }						t_plane;
 
 typedef struct			s_sphere
@@ -125,18 +125,6 @@ typedef struct			s_scene
 	t_sphere			*spheres;
 	t_cylinder			*cylinders;
 }						t_scene;
-
-/*
-** Debug print TODO remove
-*/
-void	print_scene(t_scene *s);
-void	print_camera(t_camera *c);
-void	print_light(t_light *l);
-void	print_ray(t_ray *r);
-void	print_plane(t_plane *p);
-void	print_sphere(t_sphere *s);
-void	print_vect(t_vect *v);
-void	print_color(t_color *c);
 
 /*
 ** Core

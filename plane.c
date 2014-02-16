@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   plane.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2014/02/16 19:20:54 by sboeuf            #+#    #+#             */
+/*   Updated: 2014/02/16 19:51:41 by sboeuf           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/rtv1.h"
 
 t_plane	*new_plane(t_vect *normal, double distance, t_color *c)
@@ -31,7 +43,6 @@ t_inter	*findPlanesIntersection(t_ray *ray)
 	t_vect	*normal;
 	t_color	*c;
 	t_plane	*p;
-
 
 	mininter = -1;
 	p = get_scene()->planes;

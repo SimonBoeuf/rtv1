@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hook_fct.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2014/02/16 19:18:54 by sboeuf            #+#    #+#             */
+/*   Updated: 2014/02/16 19:51:11 by sboeuf           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "./includes/rtv1.h"
 
-void			ft_exit(void)
+void		ft_exit(void)
 {
 	t_scene	*s;
 
@@ -10,7 +22,7 @@ void			ft_exit(void)
 	exit(0);
 }
 
-int		ft_key_hook(int keycode)
+int			ft_key_hook(int keycode)
 {
 	if (keycode == KEYECHAP)
 		ft_exit();

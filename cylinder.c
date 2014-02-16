@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cylinder.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2014/02/16 19:17:47 by sboeuf            #+#    #+#             */
+/*   Updated: 2014/02/16 19:41:00 by sboeuf           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/rtv1.h"
 
 t_cylinder	*new_cylinder(t_vect *center, double radius, t_color *color)
@@ -20,7 +32,7 @@ void		add_cylinder(t_cylinder *start, t_cylinder *new)
 
 void		delete_cylinders(t_cylinder **start)
 {
-	t_cylinder *tmp;
+	t_cylinder	*tmp;
 
 	while (*start != NULL)
 	{

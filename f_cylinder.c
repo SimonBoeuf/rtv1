@@ -1,9 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   f_cylinder.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2014/02/16 19:18:00 by sboeuf            #+#    #+#             */
+/*   Updated: 2014/02/16 19:43:56 by sboeuf           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/rtv1.h"
 
 t_vect		*getNormalAtCylinder(t_cylinder *c, t_vect *point)
 {
 	t_vect	*v;
-	v = normalize(vectAdd(new_vector(point->x, 0, point->z), negative(new_vector(c->center->x, 0, c->center->z))));
+
+	v = normalize(vectAdd(new_vector(point->x, 0, point->z),
+				negative(new_vector(c->center->x, 0, c->center->z))));
 	return (v);
 }
 

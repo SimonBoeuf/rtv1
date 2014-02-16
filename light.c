@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   light.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2014/02/16 19:20:42 by sboeuf            #+#    #+#             */
+/*   Updated: 2014/02/16 19:22:49 by sboeuf           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/rtv1.h"
 
 t_light	*new_light(t_vect *p, t_color *c)
@@ -6,7 +18,7 @@ t_light	*new_light(t_vect *p, t_color *c)
 
 	l = (t_light*)malloc(sizeof(t_light));
 	l->position = p;
-	l->color = c;
+	l->c = c;
 	l->next = NULL;
 	return (l);
 }
@@ -31,7 +43,7 @@ void	delete_lights(t_light **start)
 	{
 		tmp = (*start)->next;
 		delete_vect((*start)->position);
-		delete_color((*start)->color);
+		delete_color((*start)->c);
 		(*start)->next = NULL;
 		free(*start);
 		*start = tmp;

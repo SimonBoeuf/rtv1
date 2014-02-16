@@ -1,8 +1,21 @@
-# include "includes/rtv1.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   f_sphere.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2014/02/16 19:18:10 by sboeuf            #+#    #+#             */
+/*   Updated: 2014/02/16 19:44:25 by sboeuf           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "includes/rtv1.h"
 
 t_vect		*getNormalAtSphere(t_sphere *sphere, t_vect *point)
 {
 	t_vect	*v;
+
 	v = normalize(vectAdd(point, negative(sphere->center)));
 	return (v);
 }
@@ -39,7 +52,7 @@ double		findSphereIntersection(t_sphere *s, t_ray *r)
 	double	d;
 	double	rslt;
 
-	b = (2 * (r->origin->x - s->center->x) * r->direction->x) + 
+	b = (2 * (r->origin->x - s->center->x) * r->direction->x) +
 		(2 * (r->origin->y - s->center->y) * r->direction->y) +
 		(2 * (r->origin->z - s->center->z) * r->direction->z);
 	c = pow(r->origin->x - s->center->x, 2) +
