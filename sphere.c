@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sphere.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2014/02/16 19:21:14 by sboeuf            #+#    #+#             */
+/*   Updated: 2014/02/16 19:49:57 by sboeuf           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/rtv1.h"
 
 t_sphere	*new_sphere(t_vect *center, double radius, t_color *color)
@@ -18,7 +30,7 @@ void		add_sphere(t_sphere *start, t_sphere *new)
 	start->next = new;
 }
 
-void	delete_spheres(t_sphere **start)
+void		delete_spheres(t_sphere **start)
 {
 	t_sphere	*tmp;
 

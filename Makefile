@@ -1,18 +1,31 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2014/02/16 19:40:15 by sboeuf            #+#    #+#              #
+#    Updated: 2014/02/16 19:40:18 by sboeuf           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 CC			= gcc
 
 NAME		= rtv1
 
 INCLUDE		= ./includes/
 
-SRCS		= 	print.c				\
-				main.c				\
+SRCS		=	main.c				\
 				rtv1.c				\
 				camera.c			\
 				d_vect.c			\
 				ray.c				\
+				f_ray.c				\
 				vect.c				\
 				color.c				\
 				f_color.c			\
+				f_color_2.c			\
 				light.c				\
 				plane.c				\
 				sphere.c			\
@@ -27,12 +40,15 @@ SRCS		= 	print.c				\
 				img_fct.c			\
 				draw.c				\
 				hook_fct.c			\
+				cylinder.c			\
+				f_cylinder.c		\
+				intersection.c		\
 
 OBJS		= $(SRCS:.c=.o)
 
 CFLAGS		= -Wall -Werror -Wextra -g
 
-CLFLAGS     += -L/usr/X11/lib -L/usr/include/minilibx/ -lmlx -lXext -lX11 -lm
+CLFLAGS     += -L/usr/X11/lib -lmlx -lXext -lX11 -lm
 CLFLAGS     += -L includes/libft -lft
 LDFLAGS 	= -I $(DIR_LIBFT)/includes
 

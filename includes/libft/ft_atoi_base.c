@@ -6,7 +6,7 @@
 /*   By: mchoong <mchoong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/11/26 11:07:37 by mchoong           #+#    #+#             */
-/*   Updated: 2013/12/02 16:07:49 by mchoong          ###   ########.fr       */
+/*   Updated: 2014/02/16 19:46:25 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	ft_inbase(char c, int base);
 
-int	ft_atoi_base(char *str, int base)
+int			ft_atoi_base(char *str, int base)
 {
 	int	value;
 	int	sign;

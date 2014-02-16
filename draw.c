@@ -1,109 +1,36 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2014/02/16 19:17:52 by sboeuf            #+#    #+#             */
+/*   Updated: 2014/02/16 19:41:26 by sboeuf           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/rtv1.h"
-#include <stdio.h>
 
-void	correct_plane(t_color *c, t_ray *iray)
+double	get_x_point(int x)
 {
-	int	square;
+	double	rslt;
 
-	square = (int)floor(iray->origin->x) + (int)floor(iray->origin->z);
-	if (square % 2 == 0)
-	{
-		c->red = 0;
-		c->green = 0;
-		c->blue = 0;
-	}
+	if (WD > HI)
+		rslt = ((x + 0.5) / WD) * ASPR - (((WD - HI) / (double) HI) / 2);
 	else
-	{
-		c->red = 1;
-		c->green = 1;
-		c->blue = 1;
-	}
+		rslt = (x + 0.5) / (double) WD;
+	return (rslt);
 }
 
-void	correct_sphere(t_color *c, t_ray *r, t_vect *n)
+double	get_y_point(int y)
 {
-	t_vect	*ref;
-	t_ray	*ray_ref;
+	double	rslt;
 
-	c = colorScalar(AMBIENTLIGHT, c);
-	ref = normalize(vectMult(vectAdd(negative(r->direction), vectMult(n, dotProduct(n, negative(r->direction)))), 2));
-	ray_ref = new_ray(r->origin, ref);
-	/*
-	printf("%f, %f, %f : %f, %f, %f\n",
-					r->origin->x,
-					r->origin->y,
-					r->origin->z,
-					r->direction->x,
-					r->direction->y,
-					r->direction->z);
-	// */
-	ray_ref = ray_ref;
-}
-
-void	correct_light(t_color *c, t_ray *r, t_vect *n)
-{
-	c = c;
-	r = r;
-	n = n;
-}
-
-t_color	*correct(t_color *c, t_ray *ray, t_vect *normal, double inter)
-{
-	t_ray	*iray;
-
-
-	iray = new_ray(vectAdd(ray->origin, vectMult(ray->direction,
-										inter)), ray->direction);
-	/*
-	printf("%f, %f, %f : %f, %f, %f\n",
-					iray->origin->x,
-					iray->origin->y,
-					iray->origin->z,
-					iray->direction->x,
-					iray->direction->y,
-					iray->direction->z);
-	*/
-	if (c->special == 2)
-		correct_plane(c, iray);
-	if (c->special >= 0 && c->special <= 1)
-		correct_sphere(c, iray, normal);
-	correct_light(c, iray, normal);
-	return (clip(colorScalar(AMBIENTLIGHT, c)));
-}
-
-t_color	*get_object_color(t_ray *ray)
-{
-	t_sphere	*s;
-	t_plane		*p;
-	t_vect		*normal;
-	t_color		*rslt;
-
-	/*
-	printf("%f, %f, %f : %f, %f, %f\n",
-					ray->origin->x,
-					ray->origin->y,
-					ray->origin->z,
-					ray->direction->x,
-					ray->direction->y,
-					ray->direction->z);
-	*/
-	rslt = new_color(0, 0, 0, 0);
-	s = findSpheresIntersection(ray);
-	p = findPlanesIntersection(ray);
-	if ((s->radius < p->distance || p->distance == -1) && s->radius > ACCURACY)
-	{
-		//printf("%f\n", s->radius);
-		normal = s->center;
-		rslt = s->color;
-		rslt = correct(rslt, ray, normal, s->radius);
-	}
-	else if ((p->distance <= s->radius || s->radius == -1) && p->distance > ACCURACY)
-	{
-		//printf("%f\n", p->distance);
-		normal = p->normal;
-		rslt = p->color;
-		rslt = correct(rslt, ray, normal, p->distance);
-	}
+	if (HI > WD)
+		rslt = ((y + 0.5) / HI) / ASPR - (((HI - WD) / (double) WD) / 2);
+	else
+		rslt = (y + 0.5) / HI;
 	return (rslt);
 }
 
@@ -115,22 +42,18 @@ t_color	*get_color_at(int x, int y)
 	t_ray		*ray;
 	t_camera	*c;
 
-	xamnt = WD > HI ? ((x + 0.5) / WD) * ASPECTRATIO - (((WD - HI)
-		/ (double) HI) / 2) : (x + 0.5) / WD;
-	yamnt = HI > WD ? (((HI - y) + 0.5) / HI) /	ASPECTRATIO -
-		(((HI - WD) / (double) WD) / 2) : ((HI - y) + 0.5) / HI;
+	xamnt = get_x_point(x);
+	yamnt = get_y_point(y);
 	c = get_scene()->cam;
-	ray = new_ray(c->campos, normalize(vectAdd(c->camdir, vectAdd(vectMult(
-											c->camright, xamnt - 0.5),
-										vectMult(c->camdown, yamnt - 0.5)))));
+	ray = get_ray(c, xamnt, yamnt);
 	color = get_object_color(ray);
 	return (color);
 }
 
 void	ft_draw_img(void)
 {
-	int	x;
-	int	y;
+	int		x;
+	int		y;
 	t_color	*c;
 
 	x = 0;

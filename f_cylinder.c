@@ -1,64 +1,67 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   f_sphere.c                                         :+:      :+:    :+:   */
+/*   f_cylinder.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/02/16 19:18:10 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 19:44:25 by sboeuf           ###   ########.fr       */
+/*   Created: 2014/02/16 19:18:00 by sboeuf            #+#    #+#             */
+/*   Updated: 2014/02/16 19:43:56 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/rtv1.h"
 
-t_vect		*getNormalAtSphere(t_sphere *sphere, t_vect *point)
+t_vect		*getNormalAtCylinder(t_cylinder *c, t_vect *point)
 {
 	t_vect	*v;
 
-	v = normalize(vectAdd(point, negative(sphere->center)));
+	v = normalize(vectAdd(new_vector(point->x, 0, point->z),
+				negative(new_vector(c->center->x, 0, c->center->z))));
 	return (v);
 }
 
-t_inter		*findSpheresIntersection(t_ray *ray)
+t_inter		*findCylindersIntersection(t_ray *ray)
 {
 	double		mininter;
 	double		inter;
 	t_vect		*normal;
-	t_color		*c;
-	t_sphere	*s;
+	t_color		*color;
+	t_cylinder	*c;
 
 	mininter = -1;
-	s = get_scene()->spheres;
-	while (s != NULL)
+	c = get_scene()->cylinders;
+	while (c != NULL)
 	{
-		inter = findSphereIntersection(s, ray);
+		inter = findCylinderIntersection(c, ray);
 		if (inter > ACCURACY && (inter < mininter || mininter == -1))
 		{
 			mininter = inter;
-			normal = getNormalAtSphere(s, vectAdd(ray->origin,
+			normal = getNormalAtCylinder(c, vectAdd(ray->origin,
 									vectMult(ray->direction, inter)));
-			c = s->color;
+			color = c->color;
 		}
-		s = s->next;
+		c = c->next;
 	}
-	return (new_inter(normal, mininter, c));
+	return (new_inter(normal, mininter, color));
 }
 
-double		findSphereIntersection(t_sphere *s, t_ray *r)
+double		findCylinderIntersection(t_cylinder *cy, t_ray *r)
 {
+	double	a;
 	double	b;
 	double	c;
 	double	d;
 	double	rslt;
 
-	b = (2 * (r->origin->x - s->center->x) * r->direction->x) +
-		(2 * (r->origin->y - s->center->y) * r->direction->y) +
-		(2 * (r->origin->z - s->center->z) * r->direction->z);
-	c = pow(r->origin->x - s->center->x, 2) +
-		pow(r->origin->y - s->center->y, 2) +
-		pow(r->origin->z - s->center->z, 2) - (s->radius * s->radius);
-	d = b * b - 4 * c;
+	a = pow(r->direction->x, 2) +
+		pow(r->direction->z, 2);
+	b = (2 * (r->direction->x * (r->origin->x - cy->center->x))) +
+		(2 * (r->direction->z * (r->origin->z - cy->center->z)));
+	c = pow(r->origin->x - cy->center->x, 2) +
+		pow(r->origin->z - cy->center->z, 2) -
+		cy->radius * cy->radius;
+	d = b * b - 4 * a * c;
 	if (d > 0)
 	{
 		rslt = ((-b - sqrt(d)) / 2) - 0.000001 > 0 ?
@@ -70,29 +73,29 @@ double		findSphereIntersection(t_sphere *s, t_ray *r)
 	return (rslt);
 }
 
-t_sphere	*get_spheres(int fd)
+t_cylinder	*get_cylinders(int fd)
 {
 	int			r;
 	char		*line;
-	t_sphere	*s;
+	t_cylinder	*c;
 
-	s = NULL;
+	c = NULL;
 	while ((r = get_next_line(fd, &line)) > 0 && ft_strcmp(line, "----------"))
 	{
 		if (!ft_strcmp("new:", line))
 		{
-			if (s == NULL)
-				s = get_sphere(fd);
+			if (c == NULL)
+				c = get_cylinder(fd);
 			else
-				add_sphere(s, get_sphere(fd));
+				add_cylinder(c, get_cylinder(fd));
 		}
 	}
 	if (r == -1)
-		exit (-1);
-	return (s);
+		exit(-1);
+	return (c);
 }
 
-t_sphere	*get_sphere(int fd)
+t_cylinder	*get_cylinder(int fd)
 {
 	int			r;
 	char		*line;
@@ -113,6 +116,6 @@ t_sphere	*get_sphere(int fd)
 			color = get_color(fd);
 	}
 	if (r == -1)
-			exit(-1);
-	return (new_sphere(center, radius, color));
+		exit(-1);
+	return (new_cylinder(center, radius, color));
 }

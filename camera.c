@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   camera.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2014/02/16 19:17:38 by sboeuf            #+#    #+#             */
+/*   Updated: 2014/02/16 19:17:41 by sboeuf           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/rtv1.h"
 
 t_camera	*new_camera(t_vect *p, t_vect *di, t_vect *r, t_vect *dwn)
@@ -39,8 +51,9 @@ t_camera	*get_camera(int fd)
 	}
 	if (r == -1)
 			exit(-1);
-	diff_btw = new_vector(c->campos->x - look_at->x, c->campos->y - look_at->y,
-					c->campos->z - look_at->z);
+	diff_btw = new_vector(c->campos->x - look_at->x,
+							c->campos->y - look_at->y,
+							c->campos->z - look_at->z);
 	c->camdir = normalize(negative(diff_btw));
 	c->camright = normalize(crossProduct(new_vector(0, 1, 0), c->camdir));
 	c->camdown = crossProduct(c->camright, c->camdir);

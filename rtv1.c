@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rtv1.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2014/02/16 19:21:07 by sboeuf            #+#    #+#             */
+/*   Updated: 2014/02/16 19:49:11 by sboeuf           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/rtv1.h"
 
 void	display_scene(void)
@@ -6,7 +18,6 @@ void	display_scene(void)
 
 	window = init_env();
 	window->img = init_img();
-
 	ft_draw_img();
 	mlx_put_image_to_window(window->mlx, window->win, window->img->img, 0, 0);
 	mlx_hook(window->win, 2, (1L << 0), ft_key_hook, window);
@@ -37,11 +48,11 @@ void	init_scene(char *scene_file)
 		if (!ft_strcmp("spheres:", line))
 			s->spheres = get_spheres(fd);
 		if (!ft_strcmp("planes:", line))
-			{
-				s->planes = get_planes(fd);
-			}
+			s->planes = get_planes(fd);
 		if (!ft_strcmp("spots:", line))
 			s->lights = get_spots(fd);
+		if (!ft_strcmp("cylinders:", line))
+			s->cylinders = get_cylinders(fd);
 	}
 	if (ret == -1)
 			exit(-1);
