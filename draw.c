@@ -168,6 +168,7 @@ t_ray	*get_ray(t_camera *c, double x, double y)
 double	get_x_point(int x)
 {
 	double	rslt;
+
 	if (WD > HI)
 		rslt = ((x + 0.5) / WD) * ASPR - (((WD - HI) / (double) HI) / 2);
 	else
@@ -178,6 +179,7 @@ double	get_x_point(int x)
 double	get_y_point(int y)
 {
 	double	rslt;
+
 	if (HI > WD)
 		rslt = ((y + 0.5) / HI) / ASPR - (((HI - WD) / (double) WD) / 2);
 	else

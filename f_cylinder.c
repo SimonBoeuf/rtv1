@@ -3,7 +3,7 @@
 t_vect		*getNormalAtCylinder(t_cylinder *c, t_vect *point)
 {
 	t_vect	*v;
-	v = normalize(vectAdd(point, negative(c->center)));
+	v = normalize(vectAdd(new_vector(point->x, 0, point->z), negative(new_vector(c->center->x, 0, c->center->z))));
 	return (v);
 }
 
@@ -34,18 +34,20 @@ t_cylinder	*findCylindersIntersection(t_ray *ray)
 
 double		findCylinderIntersection(t_cylinder *cy, t_ray *r)
 {
+	double	a;
 	double	b;
 	double	c;
 	double	d;
 	double	rslt;
 
-	b = (2 * (r->origin->x - cy->center->x) * r->direction->x) +
-		(2 * (r->origin->y - cy->center->y) * r->direction->y) +
-		(2 * (r->origin->z - cy->center->z) * r->direction->z);
+	a = pow(r->direction->x, 2) +
+		pow(r->direction->z, 2);
+	b = (2 * (r->direction->x * (r->origin->x - cy->center->x))) +
+		(2 * (r->direction->z * (r->origin->z - cy->center->z)));
 	c = pow(r->origin->x - cy->center->x, 2) +
-		pow(r->origin->y - cy->center->y, 2) +
-		pow(r->origin->z - cy->center->z, 2) - (cy->radius * cy->radius);
-	d = b * b - 4 * c;
+		pow(r->origin->z - cy->center->z, 2) -
+		cy->radius * cy->radius;
+	d = b * b - 4 * a * c;
 	if (d > 0)
 	{
 		rslt = ((-b - sqrt(d)) / 2) - 0.000001 > 0 ?
