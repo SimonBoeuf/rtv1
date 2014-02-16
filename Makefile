@@ -10,9 +10,11 @@ SRCS		= 	print.c				\
 				camera.c			\
 				d_vect.c			\
 				ray.c				\
+				f_ray.c				\
 				vect.c				\
 				color.c				\
 				f_color.c			\
+				f_color_2.c			\
 				light.c				\
 				plane.c				\
 				sphere.c			\

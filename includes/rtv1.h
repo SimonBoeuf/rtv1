@@ -6,7 +6,7 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/01/30 17:38:11 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 17:03:47 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/16 18:40:10 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,12 @@ t_color		*colorMultiply(t_color *c1, t_color *c2);
 t_color		*colorAverage(t_color *c1, t_color *c2);
 t_color		*clip(t_color *c1);
 
+t_color		*reflection(t_color *c, t_ray *r, t_vect *normal);
+t_color		*square_plane(t_color *c, t_ray *iray, t_vect *n);
+t_color		*correct_light(t_color *c, t_ray *r, t_vect *n);
+t_color		*correct(t_color *c, t_ray *ray, t_vect *normal, double inter);
+t_color		*get_object_color(t_ray *ray);
+
 /*
 ** Vector
 */
@@ -222,6 +228,10 @@ t_ray		*new_ray(t_vect *o, t_vect *d);
 t_ray		*cpy_ray(t_ray *r);
 void		delete_ray(t_ray *r);
 
+t_ray		*get_intersection_ray(t_ray *r, double inter);
+t_ray		*get_ref_ray(t_vect *n, t_ray *r);
+t_ray		*get_ray(t_camera *c, double x, double y);
+
 /*
 ** Light
 */
@@ -238,6 +248,7 @@ t_light		*get_spot(int fd);
 
 t_inter		*new_inter(t_vect *n, double dist, t_color *c);
 t_inter		*min_inter(t_inter *i, t_inter *i2);
+t_inter		*find_min_inter(t_ray *r);
 
 /*
 ** Plane
