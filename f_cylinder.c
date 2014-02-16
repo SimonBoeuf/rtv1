@@ -12,16 +12,16 @@
 
 #include "includes/rtv1.h"
 
-t_vect		*getNormalAtCylinder(t_cylinder *c, t_vect *point)
+t_vect		*get_normal_at_cylinder(t_cylinder *c, t_vect *point)
 {
 	t_vect	*v;
 
-	v = normalize(vectAdd(new_vector(point->x, 0, point->z),
+	v = normalize(vect_add(new_vector(point->x, 0, point->z),
 				negative(new_vector(c->center->x, 0, c->center->z))));
 	return (v);
 }
 
-t_inter		*findCylindersIntersection(t_ray *ray)
+t_inter		*find_cylinders_intersection(t_ray *ray)
 {
 	double		mininter;
 	double		inter;
@@ -33,12 +33,12 @@ t_inter		*findCylindersIntersection(t_ray *ray)
 	c = get_scene()->cylinders;
 	while (c != NULL)
 	{
-		inter = findCylinderIntersection(c, ray);
+		inter = find_cylinder_intersection(c, ray);
 		if (inter > ACCURACY && (inter < mininter || mininter == -1))
 		{
 			mininter = inter;
-			normal = getNormalAtCylinder(c, vectAdd(ray->origin,
-									vectMult(ray->direction, inter)));
+			normal = get_normal_at_cylinder(c, vect_add(ray->origin,
+									vect_mult(ray->direction, inter)));
 			color = c->color;
 		}
 		c = c->next;
@@ -46,7 +46,7 @@ t_inter		*findCylindersIntersection(t_ray *ray)
 	return (new_inter(normal, mininter, color));
 }
 
-double		findCylinderIntersection(t_cylinder *cy, t_ray *r)
+double		find_cylinder_intersection(t_cylinder *cy, t_ray *r)
 {
 	double	a;
 	double	b;

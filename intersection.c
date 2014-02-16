@@ -39,9 +39,9 @@ t_inter		*find_min_inter(t_ray *r)
 	t_inter	*min;
 
 	min = new_inter(NULL, -1, NULL);
-	min = min_inter(min, findSpheresIntersection(r));
-	min = min_inter(min, findCylindersIntersection(r));
-	min = min_inter(min, findPlanesIntersection(r));
-	min = min_inter(min, findConesIntersection(r));
+	min = min_inter(min, find_spheres_intersection(r));
+	min = min_inter(min, find_cylinders_intersection(r));
+	min = min_inter(min, find_planes_intersection(r));
+	min = min_inter(min, find_cones_intersection(r));
 	return (min);
 }

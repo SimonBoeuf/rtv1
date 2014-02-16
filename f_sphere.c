@@ -12,15 +12,15 @@
 
 #include "includes/rtv1.h"
 
-t_vect		*getNormalAtSphere(t_sphere *sphere, t_vect *point)
+t_vect		*get_normal_at_sphere(t_sphere *sphere, t_vect *point)
 {
 	t_vect	*v;
 
-	v = normalize(vectAdd(point, negative(sphere->center)));
+	v = normalize(vect_add(point, negative(sphere->center)));
 	return (v);
 }
 
-t_inter		*findSpheresIntersection(t_ray *ray)
+t_inter		*find_spheres_intersection(t_ray *ray)
 {
 	double		mininter;
 	double		inter;
@@ -32,12 +32,12 @@ t_inter		*findSpheresIntersection(t_ray *ray)
 	s = get_scene()->spheres;
 	while (s != NULL)
 	{
-		inter = findSphereIntersection(s, ray);
+		inter = find_sphere_intersection(s, ray);
 		if (inter > ACCURACY && (inter < mininter || mininter == -1))
 		{
 			mininter = inter;
-			normal = getNormalAtSphere(s, vectAdd(ray->origin,
-									vectMult(ray->direction, inter)));
+			normal = get_normal_at_sphere(s, vect_add(ray->origin,
+									vect_mult(ray->direction, inter)));
 			c = s->color;
 		}
 		s = s->next;
@@ -45,7 +45,7 @@ t_inter		*findSpheresIntersection(t_ray *ray)
 	return (new_inter(normal, mininter, c));
 }
 
-double		findSphereIntersection(t_sphere *s, t_ray *r)
+double		find_sphere_intersection(t_sphere *s, t_ray *r)
 {
 	double	b;
 	double	c;

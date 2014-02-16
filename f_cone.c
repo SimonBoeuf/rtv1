@@ -6,21 +6,21 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/02/16 19:18:10 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 21:44:46 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/16 22:03:33 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/rtv1.h"
 
-t_vect		*getNormalAtCone(t_cone *cone, t_vect *point)
+t_vect		*get_normal_at_cone(t_cone *cone, t_vect *point)
 {
 	t_vect	*v;
 
-	v = normalize(vectAdd(point, negative(cone->center)));
+	v = normalize(vect_add(point, negative(cone->center)));
 	return (v);
 }
 
-t_inter		*findConesIntersection(t_ray *ray)
+t_inter		*find_cones_intersection(t_ray *ray)
 {
 	double		mininter;
 	double		inter;
@@ -32,12 +32,12 @@ t_inter		*findConesIntersection(t_ray *ray)
 	cone = get_scene()->cones;
 	while (cone != NULL)
 	{
-		inter = findConeIntersection(cone, ray);
+		inter = find_cone_intersection(cone, ray);
 		if (inter > ACCURACY && (inter < mininter || mininter == -1))
 		{
 			mininter = inter;
-			normal = getNormalAtCone(cone, vectAdd(ray->origin,
-									vectMult(ray->direction, inter)));
+			normal = get_normal_at_cone(cone, vect_add(ray->origin,
+									vect_mult(ray->direction, inter)));
 			c = cone->color;
 		}
 		cone = cone->next;
@@ -45,7 +45,7 @@ t_inter		*findConesIntersection(t_ray *ray)
 	return (new_inter(normal, mininter, c));
 }
 
-double		findConeIntersection(t_cone *cone, t_ray *r)
+double		find_cone_intersection(t_cone *cone, t_ray *r)
 {
 	double	a;
 	double	b;
@@ -66,12 +66,12 @@ double		findConeIntersection(t_cone *cone, t_ray *r)
 		pow(r->origin->x - cone->center->x + r->origin->z - cone->center->z, 2)
 		- pow(sin(cone->alpha), 2) *
 		pow(r->origin->y - cone->center->y, 2);
-	d = b * b - 4 * c;
+	d = b * b - 4 * a * c;
 	if (d > 0)
 	{
-		rslt = ((-b - sqrt(d)) / 2) - 0.000001 > 0 ?
-			(-b - sqrt(d)) / 2 - 0.000001 :
-			(-b + sqrt(d)) / 2 - 0.000001;
+		rslt = ((-b - sqrt(d)) / (2 * a)) - 0.000001 > 0 ?
+			(-b - sqrt(d)) / (2 * a) - 0.000001 :
+			(-b + sqrt(d)) / (2 * a) - 0.000001;
 	}
 	else
 		rslt = -1;
