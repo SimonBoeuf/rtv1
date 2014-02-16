@@ -6,7 +6,7 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/02/16 19:18:10 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 22:47:26 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/16 22:03:33 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,35 @@ t_inter		*find_cones_intersection(t_ray *ray)
 
 double		find_cone_intersection(t_cone *cone, t_ray *r)
 {
-	(void)cone;
-	(void)r;
-	return (-1);
+	double	a;
+	double	b;
+	double	c;
+	double	d;
+	double	rslt;
+
+	a = pow(cos(cone->alpha), 2) *
+		pow((r->direction->x + r->direction->z), 2) -
+		pow(sin(cone->alpha), 2) *
+		pow(r->direction->y, 2);
+	b = 2 * pow(cos(cone->alpha), 2) *
+		(r->direction->x * (r->origin->x - cone->center->x) +
+			r->direction->z * (r->origin->z - cone->center->z)) -
+		2 * pow(sin(cone->alpha), 2) *
+		r->direction->y * (r->origin->y - cone->center->y);
+	c = pow(cos(cone->alpha), 2) *
+		pow(r->origin->x - cone->center->x + r->origin->z - cone->center->z, 2)
+		- pow(sin(cone->alpha), 2) *
+		pow(r->origin->y - cone->center->y, 2);
+	d = b * b - 4 * a * c;
+	if (d > 0)
+	{
+		rslt = ((-b - sqrt(d)) / (2 * a)) - 0.000001 > 0 ?
+			(-b - sqrt(d)) / (2 * a) - 0.000001 :
+			(-b + sqrt(d)) / (2 * a) - 0.000001;
+	}
+	else
+		rslt = -1;
+	return (rslt);
 }
 
 t_cone	*get_cones(int fd)
