@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   f_sphere.c                                         :+:      :+:    :+:   */
+/*   f_cone.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/02/16 19:18:10 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 21:37:53 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/16 21:44:46 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ double		findConeIntersection(t_cone *cone, t_ray *r)
 		pow(sin(cone->alpha), 2) *
 		pow(r->direction->y, 2);
 	b = 2 * pow(cos(cone->alpha), 2) *
-		(r->direction->x * (r->origin->x - cone->center->x) + 
+		(r->direction->x * (r->origin->x - cone->center->x) +
 			r->direction->z * (r->origin->z - cone->center->z)) -
 		2 * pow(sin(cone->alpha), 2) *
 		r->direction->y * (r->origin->y - cone->center->y);
 	c = pow(cos(cone->alpha), 2) *
-		pow(r->origin->x - cone->center->x + r->origin->z - cone->center->z, 2) -
-		pow(sin(cone->alpha), 2) *
+		pow(r->origin->x - cone->center->x + r->origin->z - cone->center->z, 2)
+		- pow(sin(cone->alpha), 2) *
 		pow(r->origin->y - cone->center->y, 2);
 	d = b * b - 4 * c;
 	if (d > 0)
