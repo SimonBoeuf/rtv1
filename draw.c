@@ -54,7 +54,7 @@ t_color	*correct_light(t_color *c, t_ray *r, t_vect *n)
 		{
 			shadow = new_ray(r->origin, dist_l);
 			shadowed = 0;
-			if (findSpheresIntersection(shadow)->dist > ACCURACY || findPlanesIntersection(shadow)->dist > ACCURACY)
+			if (findSpheresIntersection(shadow)->dist > ACCURACY || findPlanesIntersection(shadow)->dist > ACCURACY || findCylindersIntersection(shadow)->dist > ACCURACY)
 				shadowed = 1;
 			if (!shadowed)
 			{
@@ -92,28 +92,22 @@ t_color	*reflection(t_color *c, t_ray *r, t_vect *normal)
 {
 	t_ray		*ref;
 	t_inter		*min;
-	t_inter		*s;
-	t_inter		*p;
 	t_color		*rslt;
 	t_ray		*ref_inter_ray;
 
 	ref = get_ref_ray(normal, r);
-	s = findSpheresIntersection(ref);
-	p = findPlanesIntersection(ref);
-	min = min_inter(s, p);
-	if ((s->dist < p->dist || p->dist == -1) && s->dist > ACCURACY)
+	min = min_inter(NULL, findSpheresIntersection(ref));
+	min = min_inter(min, findPlanesIntersection(ref));
+	min = min_inter(min, findCylindersIntersection(ref));
+	if (min->dist > ACCURACY)
 	{
-		ref_inter_ray = get_intersection_ray(ref, s->dist);
-		if (s->c->special > 0 && s->c->special <= 1)
-			rslt = reflection(s->c, ref_inter_ray, s->normal);
+		ref_inter_ray = get_intersection_ray(ref, min->dist);
+		if (min->c->special > 0 && min->c->special <= 1)
+			rslt = reflection(min->c, ref_inter_ray, min->normal);
+		else if (min->c->special == 2)
+			rslt = square_plane(c, ref_inter_ray);
 		else
 			rslt = c;
-		rslt = colorAdd(c, colorScalar(rslt->special, rslt));
-	}
-	else if ((p->dist <= s->dist || s->dist == -1) && p->dist > ACCURACY)
-	{
-		ref_inter_ray = get_intersection_ray(ref, p->dist);
-		rslt = square_plane(c, ref_inter_ray);
 		rslt = colorAdd(c, colorScalar(rslt->special, rslt));
 	}
 	else
