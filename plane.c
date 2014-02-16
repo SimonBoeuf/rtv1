@@ -24,7 +24,7 @@ void	add_plane(t_plane *start, t_plane *new)
 	}
 }
 
-t_plane	*findPlanesIntersection(t_ray *ray)
+t_inter	*findPlanesIntersection(t_ray *ray)
 {
 	double	mininter;
 	double	inter;
@@ -46,7 +46,7 @@ t_plane	*findPlanesIntersection(t_ray *ray)
 		}
 		p = p->next;
 	}
-	return (new_plane(normal, mininter, c));
+	return (new_inter(normal, mininter, c));
 }
 
 double	findPlaneIntersection(t_plane *p, t_ray *ray)

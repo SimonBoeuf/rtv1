@@ -6,7 +6,7 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/01/30 17:38:11 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 15:07:47 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/16 17:03:47 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,13 @@ typedef struct			 s_camera
 	t_vect				*camright;
 	t_vect				*camdown;
 }						t_camera;
+
+typedef struct			s_inter
+{
+	t_vect				*normal;
+	double				dist;
+	t_color				*c;
+}						t_inter;
 
 typedef struct			s_light
 {
@@ -226,11 +233,18 @@ t_light		*get_spots(int fd);
 t_light		*get_spot(int fd);
 
 /*
+** Intersection
+*/
+
+t_inter		*new_inter(t_vect *n, double dist, t_color *c);
+t_inter		*min_inter(t_inter *i, t_inter *i2);
+
+/*
 ** Plane
 */
 t_plane		*new_plane(t_vect *normal, double distance, t_color *c);
 void		add_plane(t_plane *start, t_plane *new);
-t_plane		*findPlanesIntersection(t_ray *ray);
+t_inter		*findPlanesIntersection(t_ray *ray);
 double		findPlaneIntersection(t_plane *p, t_ray *ray);
 void		delete_planes(t_plane **p);
 
@@ -244,7 +258,7 @@ t_sphere	*new_sphere(t_vect *center, double radius, t_color *color);
 void		add_sphere(t_sphere *start, t_sphere *new);
 void		delete_spheres(t_sphere **s);
 
-t_sphere	*findSpheresIntersection(t_ray *r);
+t_inter		*findSpheresIntersection(t_ray *r);
 double		findSphereIntersection(t_sphere *s, t_ray *r);
 t_vect		*getNormalAtSphere(t_sphere *sphere, t_vect *point);
 t_sphere	*get_spheres(int fd);
@@ -257,7 +271,7 @@ t_cylinder	*new_cylinder(t_vect *center, double radius, t_color *color);
 void		add_cylinder(t_cylinder *start, t_cylinder *new);
 void		delete_cylinders(t_cylinder **s);
 
-t_cylinder	*findCylindersIntersection(t_ray *r);
+t_inter		*findCylindersIntersection(t_ray *r);
 double		findCylinderIntersection(t_cylinder *c, t_ray *r);
 t_vect		*getNormalAtCylinder(t_cylinder *c, t_vect *point);
 t_cylinder	*get_cylinders(int fd);

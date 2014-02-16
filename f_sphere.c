@@ -3,12 +3,11 @@
 t_vect		*getNormalAtSphere(t_sphere *sphere, t_vect *point)
 {
 	t_vect	*v;
-	v = normalize(vectAdd(new_vector(point->x, 0, point->z), negative(new_vector(sphere->center->x, 0, sphere->center->z))));
-	//v = normalize(vectAdd(point, negative(c->center)));
+	v = normalize(vectAdd(point, negative(sphere->center)));
 	return (v);
 }
 
-t_sphere	*findSpheresIntersection(t_ray *ray)
+t_inter		*findSpheresIntersection(t_ray *ray)
 {
 	double		mininter;
 	double		inter;
@@ -30,33 +29,23 @@ t_sphere	*findSpheresIntersection(t_ray *ray)
 		}
 		s = s->next;
 	}
-	return (new_sphere(normal, mininter, c));
+	return (new_inter(normal, mininter, c));
 }
 
 double		findSphereIntersection(t_sphere *s, t_ray *r)
 {
-	double	a;
 	double	b;
 	double	c;
 	double	d;
 	double	rslt;
 
-	a = pow(r->direction->x, 2) +
-		pow(r->direction->z, 2);
-	b = (2 * (r->direction->x * (r->origin->x - s->center->x))) +
-		(2 * (r->direction->z * (r->origin->z - s->center->z)));
-	c = pow(r->origin->x - s->center->x, 2) +
-		pow(r->origin->z - s->center->z, 2) -
-		s->radius * s->radius;
-	/*
 	b = (2 * (r->origin->x - s->center->x) * r->direction->x) + 
 		(2 * (r->origin->y - s->center->y) * r->direction->y) +
 		(2 * (r->origin->z - s->center->z) * r->direction->z);
 	c = pow(r->origin->x - s->center->x, 2) +
 		pow(r->origin->y - s->center->y, 2) +
 		pow(r->origin->z - s->center->z, 2) - (s->radius * s->radius);
-	*/
-	d = b * b - 4 * a * c;
+	d = b * b - 4 * c;
 	if (d > 0)
 	{
 		rslt = ((-b - sqrt(d)) / 2) - 0.000001 > 0 ?

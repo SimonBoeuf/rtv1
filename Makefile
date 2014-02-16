@@ -29,12 +29,13 @@ SRCS		= 	print.c				\
 				hook_fct.c			\
 				cylinder.c			\
 				f_cylinder.c		\
+				intersection.c		\
 
 OBJS		= $(SRCS:.c=.o)
 
 CFLAGS		= -Wall -Werror -Wextra -g
 
-CLFLAGS     += -L/usr/X11/lib -L/usr/include/minilibx/ -lmlx -lXext -lX11 -lm
+CLFLAGS     += -L/usr/X11/lib -lmlx -lXext -lX11 -lm
 CLFLAGS     += -L includes/libft -lft
 LDFLAGS 	= -I $(DIR_LIBFT)/includes
 

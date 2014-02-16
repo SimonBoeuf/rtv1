@@ -54,7 +54,7 @@ t_color	*correct_light(t_color *c, t_ray *r, t_vect *n)
 		{
 			shadow = new_ray(r->origin, dist_l);
 			shadowed = 0;
-			if (findSpheresIntersection(shadow)->radius > ACCURACY || findPlanesIntersection(shadow)->distance > ACCURACY)
+			if (findSpheresIntersection(shadow)->dist > ACCURACY || findPlanesIntersection(shadow)->dist > ACCURACY)
 				shadowed = 1;
 			if (!shadowed)
 			{
@@ -91,26 +91,28 @@ t_ray	*get_intersection_ray(t_ray *r, double inter)
 t_color	*reflection(t_color *c, t_ray *r, t_vect *normal)
 {
 	t_ray		*ref;
-	t_sphere	*s;
-	t_plane		*p;
+	t_inter		*min;
+	t_inter		*s;
+	t_inter		*p;
 	t_color		*rslt;
 	t_ray		*ref_inter_ray;
 
 	ref = get_ref_ray(normal, r);
 	s = findSpheresIntersection(ref);
 	p = findPlanesIntersection(ref);
-	if ((s->radius < p->distance || p->distance == -1) && s->radius > ACCURACY)
+	min = min_inter(s, p);
+	if ((s->dist < p->dist || p->dist == -1) && s->dist > ACCURACY)
 	{
-		ref_inter_ray = get_intersection_ray(ref, s->radius);
-		if (s->color->special > 0 && s->color->special <= 1)
-			rslt = reflection(s->color, ref_inter_ray, s->center);
+		ref_inter_ray = get_intersection_ray(ref, s->dist);
+		if (s->c->special > 0 && s->c->special <= 1)
+			rslt = reflection(s->c, ref_inter_ray, s->normal);
 		else
 			rslt = c;
 		rslt = colorAdd(c, colorScalar(rslt->special, rslt));
 	}
-	else if ((p->distance <= s->radius || s->radius == -1) && p->distance > ACCURACY)
+	else if ((p->dist <= s->dist || s->dist == -1) && p->dist > ACCURACY)
 	{
-		ref_inter_ray = get_intersection_ray(ref, p->distance);
+		ref_inter_ray = get_intersection_ray(ref, p->dist);
 		rslt = square_plane(c, ref_inter_ray);
 		rslt = colorAdd(c, colorScalar(rslt->special, rslt));
 	}
@@ -134,16 +136,15 @@ t_color	*correct(t_color *c, t_ray *ray, t_vect *normal, double inter)
 
 t_color	*get_object_color(t_ray *ray)
 {
-	t_sphere	*s;
-	t_plane		*p;
 	t_color		*rslt;
+	t_inter		*mininter;
 
-	s = findSpheresIntersection(ray);
-	p = findPlanesIntersection(ray);
-	if ((s->radius < p->distance || p->distance == -1) && s->radius > ACCURACY)
-		rslt = correct(s->color, ray, s->center, s->radius);
-	else if ((p->distance <= s->radius || s->radius == -1) && p->distance > ACCURACY)
-		rslt = correct(p->color, ray, p->normal, p->distance);
+	mininter = new_inter(NULL, -1, NULL);
+	mininter = min_inter(mininter, findCylindersIntersection(ray));
+	mininter = min_inter(mininter, findSpheresIntersection(ray));
+	mininter = min_inter(mininter, findPlanesIntersection(ray));
+	if (mininter->dist > ACCURACY)
+		rslt = correct(mininter->c, ray, mininter->normal, mininter->dist);
 	else
 		rslt = new_color(0, 0, 0, 0);
 	return (rslt);

@@ -7,7 +7,7 @@ t_vect		*getNormalAtCylinder(t_cylinder *c, t_vect *point)
 	return (v);
 }
 
-t_cylinder	*findCylindersIntersection(t_ray *ray)
+t_inter		*findCylindersIntersection(t_ray *ray)
 {
 	double		mininter;
 	double		inter;
@@ -29,7 +29,7 @@ t_cylinder	*findCylindersIntersection(t_ray *ray)
 		}
 		c = c->next;
 	}
-	return (new_cylinder(normal, mininter, color));
+	return (new_inter(normal, mininter, color));
 }
 
 double		findCylinderIntersection(t_cylinder *cy, t_ray *r)
