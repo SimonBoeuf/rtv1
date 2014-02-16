@@ -6,7 +6,7 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/02/16 15:07:00 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 19:48:41 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/16 21:07:55 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,6 @@ t_inter		*find_min_inter(t_ray *r)
 	min = min_inter(min, findSpheresIntersection(r));
 	min = min_inter(min, findCylindersIntersection(r));
 	min = min_inter(min, findPlanesIntersection(r));
+	min = min_inter(min, findConesIntersection(r));
 	return (min);
 }

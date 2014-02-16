@@ -6,7 +6,7 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/02/16 19:21:07 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 19:49:11 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/16 21:07:37 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void	init_scene(char *scene_file)
 			s->lights = get_spots(fd);
 		if (!ft_strcmp("cylinders:", line))
 			s->cylinders = get_cylinders(fd);
+		if (!ft_strcmp("cones:", line))
+			s->cones = get_cones(fd);
 	}
 	if (ret == -1)
 			exit(-1);

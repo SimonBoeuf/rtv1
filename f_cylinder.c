@@ -6,7 +6,7 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/02/16 19:18:00 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 19:43:56 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/16 21:42:56 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ double		findCylinderIntersection(t_cylinder *cy, t_ray *r)
 	d = b * b - 4 * a * c;
 	if (d > 0)
 	{
-		rslt = ((-b - sqrt(d)) / 2) - 0.000001 > 0 ?
-			(-b - sqrt(d)) / 2 - 0.000001 :
-			(-b + sqrt(d)) / 2 - 0.000001;
+		rslt = ((-b - sqrt(d)) / (2 * a)) - 0.000001 > 0 ?
+			(-b - sqrt(d)) / (2 * a) - 0.000001 :
+			(-b + sqrt(d)) / (2 * a) - 0.000001;
 	}
 	else
 		rslt = -1;

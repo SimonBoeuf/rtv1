@@ -6,7 +6,7 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/01/30 17:38:11 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 19:48:26 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/16 21:03:00 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,14 @@ typedef struct			s_cylinder
 	struct s_cylinder	*next;
 }						t_cylinder;
 
+typedef struct			s_cone
+{
+	t_vect				*center;
+	double				alpha;
+	t_color				*color;
+	struct s_cone		*next;
+}						t_cone;
+
 typedef struct			s_scene
 {
 	t_camera			*cam;
@@ -124,6 +132,7 @@ typedef struct			s_scene
 	t_plane				*planes;
 	t_sphere			*spheres;
 	t_cylinder			*cylinders;
+	t_cone				*cones;
 }						t_scene;
 
 /*
@@ -275,6 +284,19 @@ double		findCylinderIntersection(t_cylinder *c, t_ray *r);
 t_vect		*getNormalAtCylinder(t_cylinder *c, t_vect *point);
 t_cylinder	*get_cylinders(int fd);
 t_cylinder	*get_cylinder(int fd);
+
+/*
+** Cone
+*/
+t_cone		*new_cone(t_vect *center, double alpha, t_color *color);
+void		add_cone(t_cone *start, t_cone *new);
+void		delete_cones(t_cone **s);
+
+t_inter		*findConesIntersection(t_ray *r);
+double		findConeIntersection(t_cone *c, t_ray *r);
+t_vect		*getNormalAtCone(t_cone *c, t_vect *point);
+t_cone		*get_cones(int fd);
+t_cone		*get_cone(int fd);
 
 /*
 ** Scene
