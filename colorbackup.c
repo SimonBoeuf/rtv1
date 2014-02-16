@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   f_color_2.c                                        :+:      :+:    :+:   */
+/*   colorbackup.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/02/16 19:17:57 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 23:13:44 by sboeuf           ###   ########.fr       */
+/*   Created: 2014/02/16 19:17:44 by sboeuf            #+#    #+#             */
+/*   Updated: 2014/02/16 19:17:46 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/rtv1.h"
+# include "includes/rtv1.h"
 
 t_color	*reflection(t_color *c, t_ray *r, t_vect *normal)
 {
@@ -24,13 +24,13 @@ t_color	*reflection(t_color *c, t_ray *r, t_vect *normal)
 	if (min->dist > ACCURACY)
 	{
 		ref_inter_ray = get_intersection_ray(ref, min->dist);
-		if (min->c->spec > 0 && min->c->spec <= 1)
+		if (min->c->special > 0 && min->c->special <= 1)
 			rslt = reflection(min->c, ref_inter_ray, min->normal);
-		else if (min->c->spec >= 2)
+		else if (min->c->special >= 2)
 			rslt = square_plane(c, ref_inter_ray, normal);
 		else
 			rslt = c;
-		rslt = color_add(c, color_scalar(rslt->spec, rslt));
+		rslt = colorAdd(c, colorScalar(rslt->special, rslt));
 	}
 	else
 		rslt = c;
@@ -44,7 +44,7 @@ t_color	*square_plane(t_color *c, t_ray *iray, t_vect *n)
 
 	square = (int)floor(iray->origin->x) + (int)floor(iray->origin->z);
 	if (square % 2 == 0)
-		rslt = reflection(new_color(0, 0, 0, c->spec), iray, n);
+		rslt = reflection(new_color(0, 0, 0, c->special), iray, n);
 	else
 		rslt = reflection(c, iray, n);
 	return (rslt);
@@ -53,30 +53,28 @@ t_color	*square_plane(t_color *c, t_ray *iray, t_vect *n)
 t_color	*correct_light(t_color *c, t_ray *r, t_vect *n)
 {
 	t_light		*l;
-	float		a;
+	float		cosine_angle;
 	t_vect		*dist_l;
-	t_ray		*shadow;
-	t_color		*f;
+	t_vect		*ref_dir;
+	double		specular;
 
-	f = color_scalar(AMBIENTLIGHT, c);
+	c = colorScalar(AMBIENTLIGHT, c);
 	l = get_scene()->lights;
 	while (l != NULL)
 	{
-		dist_l = normalize(vect_add(l->position, negative(r->origin)));
-		a = dot_product(n, dist_l);
-		shadow = new_ray(r->origin, dist_l);
-		if (a > 0 && find_min_inter(shadow)->dist <= ACCURACY)
+		dist_l = normalize(vectAdd(l->position, negative(r->origin)));
+		cosine_angle = dotProduct(n, dist_l);
+		if (cosine_angle > 0 && find_min_inter(new_ray(r->origin, dist_l))->dist <= ACCURACY)
 		{
-				f = color_add(f, color_scalar(a, color_multiply(c, l->c)));
-				if (c->spec > 0 && c->spec <= 1)
-				{
-					a = dot_product(get_ref_ray(n, r)->direction, dist_l);
-					f = color_add(f, color_scalar(pow(a, 100) * c->spec, l->c));
-				}
+				c = colorAdd(c, colorScalar(cosine_angle, colorMultiply(c, l->color)));
+				ref_dir = get_ref_ray(n, r)->direction;
+				specular = pow(dotProduct(ref_dir, dist_l), 1);
+				if (specular > 0)
+					c = colorAdd(c, colorScalar(specular * c->special, l->color));
 		}
 		l = l->next;
 	}
-	return (f);
+	return (c);
 }
 
 t_color	*correct(t_color *c, t_ray *ray, t_vect *normal, double inter)
@@ -84,9 +82,9 @@ t_color	*correct(t_color *c, t_ray *ray, t_vect *normal, double inter)
 	t_ray	*iray;
 
 	iray = get_intersection_ray(ray, inter);
-	if (c->spec >= 2)
+	if (c->special >= 2)
 		c = square_plane(c, iray, normal);
-	if (c->spec > 0 && c->spec <= 1)
+	if (c->special > 0 && c->special <= 1)
 		c = reflection(c, iray, normal);
 	c = correct_light(c, iray, normal);
 	return (clip(c));

@@ -6,7 +6,7 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/02/16 19:20:54 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 19:51:41 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/16 22:18:42 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	add_plane(t_plane *start, t_plane *new)
 	}
 }
 
-t_inter	*findPlanesIntersection(t_ray *ray)
+t_inter	*find_planes_intersection(t_ray *ray)
 {
 	double	mininter;
 	double	inter;
@@ -48,7 +48,7 @@ t_inter	*findPlanesIntersection(t_ray *ray)
 	p = get_scene()->planes;
 	while (p != NULL)
 	{
-		inter = findPlaneIntersection(p, ray);
+		inter = find_plane_intersection(p, ray);
 		if (inter > ACCURACY && (inter < mininter || mininter == -1))
 		{
 			mininter = inter;
@@ -60,18 +60,18 @@ t_inter	*findPlanesIntersection(t_ray *ray)
 	return (new_inter(normal, mininter, c));
 }
 
-double	findPlaneIntersection(t_plane *p, t_ray *ray)
+double	find_plane_intersection(t_plane *p, t_ray *ray)
 {
 	double	a;
 	double	b;
 
-	a = dotProduct(p->normal, ray->direction);
+	a = dot_product(p->normal, ray->direction);
 	if (a == 0)
 		return (-1);
 	else
 	{
-		b = dotProduct(p->normal, vectAdd(ray->origin,
-					negative(vectMult(p->normal, p->distance))));
+		b = dot_product(p->normal, vect_add(ray->origin,
+					negative(vect_mult(p->normal, p->distance))));
 		return (-b / a);
 	}
 }

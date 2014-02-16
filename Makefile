@@ -6,7 +6,7 @@
 #    By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/02/16 19:40:15 by sboeuf            #+#    #+#              #
-#    Updated: 2014/02/16 19:40:18 by sboeuf           ###   ########.fr        #
+#    Updated: 2014/02/16 20:59:17 by sboeuf           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,8 @@ SRCS		=	main.c				\
 				hook_fct.c			\
 				cylinder.c			\
 				f_cylinder.c		\
+				cone.c				\
+				f_cone.c			\
 				intersection.c		\
 
 OBJS		= $(SRCS:.c=.o)

@@ -6,22 +6,22 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/02/16 19:18:00 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 19:43:56 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/16 21:42:56 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/rtv1.h"
 
-t_vect		*getNormalAtCylinder(t_cylinder *c, t_vect *point)
+t_vect		*get_normal_at_cylinder(t_cylinder *c, t_vect *point)
 {
 	t_vect	*v;
 
-	v = normalize(vectAdd(new_vector(point->x, 0, point->z),
+	v = normalize(vect_add(new_vector(point->x, 0, point->z),
 				negative(new_vector(c->center->x, 0, c->center->z))));
 	return (v);
 }
 
-t_inter		*findCylindersIntersection(t_ray *ray)
+t_inter		*find_cylinders_intersection(t_ray *ray)
 {
 	double		mininter;
 	double		inter;
@@ -33,12 +33,12 @@ t_inter		*findCylindersIntersection(t_ray *ray)
 	c = get_scene()->cylinders;
 	while (c != NULL)
 	{
-		inter = findCylinderIntersection(c, ray);
+		inter = find_cylinder_intersection(c, ray);
 		if (inter > ACCURACY && (inter < mininter || mininter == -1))
 		{
 			mininter = inter;
-			normal = getNormalAtCylinder(c, vectAdd(ray->origin,
-									vectMult(ray->direction, inter)));
+			normal = get_normal_at_cylinder(c, vect_add(ray->origin,
+									vect_mult(ray->direction, inter)));
 			color = c->color;
 		}
 		c = c->next;
@@ -46,7 +46,7 @@ t_inter		*findCylindersIntersection(t_ray *ray)
 	return (new_inter(normal, mininter, color));
 }
 
-double		findCylinderIntersection(t_cylinder *cy, t_ray *r)
+double		find_cylinder_intersection(t_cylinder *cy, t_ray *r)
 {
 	double	a;
 	double	b;
@@ -64,9 +64,9 @@ double		findCylinderIntersection(t_cylinder *cy, t_ray *r)
 	d = b * b - 4 * a * c;
 	if (d > 0)
 	{
-		rslt = ((-b - sqrt(d)) / 2) - 0.000001 > 0 ?
-			(-b - sqrt(d)) / 2 - 0.000001 :
-			(-b + sqrt(d)) / 2 - 0.000001;
+		rslt = ((-b - sqrt(d)) / (2 * a)) - 0.000001 > 0 ?
+			(-b - sqrt(d)) / (2 * a) - 0.000001 :
+			(-b + sqrt(d)) / (2 * a) - 0.000001;
 	}
 	else
 		rslt = -1;

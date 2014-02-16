@@ -6,13 +6,13 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/02/16 19:17:55 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 19:43:32 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/16 22:06:48 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/rtv1.h"
 
-t_color	*colorScalar(double scalar, t_color *c1)
+t_color	*color_scalar(double scalar, t_color *c1)
 {
 	t_color	*c2;
 
@@ -21,7 +21,7 @@ t_color	*colorScalar(double scalar, t_color *c1)
 	return (c2);
 }
 
-t_color	*colorAdd(t_color *c1, t_color *c2)
+t_color	*color_add(t_color *c1, t_color *c2)
 {
 	t_color	*rslt;
 
@@ -30,7 +30,7 @@ t_color	*colorAdd(t_color *c1, t_color *c2)
 	return (rslt);
 }
 
-t_color	*colorMultiply(t_color *c1, t_color *c2)
+t_color	*color_multiply(t_color *c1, t_color *c2)
 {
 	t_color	*rslt;
 
@@ -39,7 +39,7 @@ t_color	*colorMultiply(t_color *c1, t_color *c2)
 	return (rslt);
 }
 
-t_color	*colorAverage(t_color *c1, t_color *c2)
+t_color	*color_average(t_color *c1, t_color *c2)
 {
 	t_color	*r;
 

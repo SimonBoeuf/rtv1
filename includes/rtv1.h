@@ -6,7 +6,7 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/01/30 17:38:11 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 19:48:26 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/16 22:24:14 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,14 @@ typedef struct			s_cylinder
 	struct s_cylinder	*next;
 }						t_cylinder;
 
+typedef struct			s_cone
+{
+	t_vect				*center;
+	double				alpha;
+	t_color				*color;
+	struct s_cone		*next;
+}						t_cone;
+
 typedef struct			s_scene
 {
 	t_camera			*cam;
@@ -124,6 +132,7 @@ typedef struct			s_scene
 	t_plane				*planes;
 	t_sphere			*spheres;
 	t_cylinder			*cylinders;
+	t_cone				*cones;
 }						t_scene;
 
 /*
@@ -173,10 +182,10 @@ t_color		*cpy_color(t_color *c);
 t_color		*get_color(int fd);
 int			get_color_number(t_color *c);
 
-t_color		*colorScalar(double scalar, t_color *c1);
-t_color		*colorAdd(t_color *c1, t_color *c2);
-t_color		*colorMultiply(t_color *c1, t_color *c2);
-t_color		*colorAverage(t_color *c1, t_color *c2);
+t_color		*color_scalar(double scalar, t_color *c1);
+t_color		*color_add(t_color *c1, t_color *c2);
+t_color		*color_multiply(t_color *c1, t_color *c2);
+t_color		*color_average(t_color *c1, t_color *c2);
 t_color		*clip(t_color *c1);
 
 t_color		*reflection(t_color *c, t_ray *r, t_vect *normal);
@@ -196,10 +205,10 @@ t_vect		*cpy_vect(t_vect *v);
 t_vect		*normalize(t_vect *v1);
 t_vect		*negative(t_vect *v1);
 t_vect		*crossProduct(t_vect *v1, t_vect *v2);
-t_vect		*vectAdd(t_vect *v1, t_vect *v2);
-t_vect		*vectMult(t_vect *v1, double scalar);
+t_vect		*vect_add(t_vect *v1, t_vect *v2);
+t_vect		*vect_mult(t_vect *v1, double scalar);
 
-double		dotProduct(t_vect *v1, t_vect *v2);
+double		dot_product(t_vect *v1, t_vect *v2);
 double		magnitude(t_vect *v);
 
 /*
@@ -243,8 +252,8 @@ t_inter		*find_min_inter(t_ray *r);
 */
 t_plane		*new_plane(t_vect *normal, double distance, t_color *c);
 void		add_plane(t_plane *start, t_plane *new);
-t_inter		*findPlanesIntersection(t_ray *ray);
-double		findPlaneIntersection(t_plane *p, t_ray *ray);
+t_inter		*find_planes_intersection(t_ray *ray);
+double		find_plane_intersection(t_plane *p, t_ray *ray);
 void		delete_planes(t_plane **p);
 
 t_plane		*get_planes(int fd);
@@ -257,9 +266,9 @@ t_sphere	*new_sphere(t_vect *center, double radius, t_color *color);
 void		add_sphere(t_sphere *start, t_sphere *new);
 void		delete_spheres(t_sphere **s);
 
-t_inter		*findSpheresIntersection(t_ray *r);
-double		findSphereIntersection(t_sphere *s, t_ray *r);
-t_vect		*getNormalAtSphere(t_sphere *sphere, t_vect *point);
+t_inter		*find_spheres_intersection(t_ray *r);
+double		find_sphere_intersection(t_sphere *s, t_ray *r);
+t_vect		*get_normal_at_sphere(t_sphere *sphere, t_vect *point);
 t_sphere	*get_spheres(int fd);
 t_sphere	*get_sphere(int fd);
 
@@ -270,11 +279,24 @@ t_cylinder	*new_cylinder(t_vect *center, double radius, t_color *color);
 void		add_cylinder(t_cylinder *start, t_cylinder *new);
 void		delete_cylinders(t_cylinder **s);
 
-t_inter		*findCylindersIntersection(t_ray *r);
-double		findCylinderIntersection(t_cylinder *c, t_ray *r);
-t_vect		*getNormalAtCylinder(t_cylinder *c, t_vect *point);
+t_inter		*find_cylinders_intersection(t_ray *r);
+double		find_cylinder_intersection(t_cylinder *c, t_ray *r);
+t_vect		*get_normal_at_cylinder(t_cylinder *c, t_vect *point);
 t_cylinder	*get_cylinders(int fd);
 t_cylinder	*get_cylinder(int fd);
+
+/*
+** Cone
+*/
+t_cone		*new_cone(t_vect *center, double alpha, t_color *color);
+void		add_cone(t_cone *start, t_cone *new);
+void		delete_cones(t_cone **s);
+
+t_inter		*find_cones_intersection(t_ray *r);
+double		find_cone_intersection(t_cone *c, t_ray *r);
+t_vect		*get_normal_at_cone(t_cone *c, t_vect *point);
+t_cone		*get_cones(int fd);
+t_cone		*get_cone(int fd);
 
 /*
 ** Scene

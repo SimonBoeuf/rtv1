@@ -6,13 +6,12 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/02/16 19:20:44 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 19:20:46 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/16 20:52:06 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/rtv1.h"
 
-#include <stdio.h>
 int	main(int argc, char **argv)
 {
 	if (argc == 2)

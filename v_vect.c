@@ -6,7 +6,7 @@
 /*   By: sboeuf <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/02/16 19:21:16 by sboeuf            #+#    #+#             */
-/*   Updated: 2014/02/16 19:50:22 by sboeuf           ###   ########.fr       */
+/*   Updated: 2014/02/16 22:09:49 by sboeuf           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_vect	*crossProduct(t_vect *v1, t_vect *v2)
 	return (rslt);
 }
 
-t_vect	*vectAdd(t_vect *v1, t_vect *v2)
+t_vect	*vect_add(t_vect *v1, t_vect *v2)
 {
 	t_vect	*rslt;
 
@@ -50,7 +50,7 @@ t_vect	*vectAdd(t_vect *v1, t_vect *v2)
 	return (rslt);
 }
 
-t_vect	*vectMult(t_vect *v1, double scalar)
+t_vect	*vect_mult(t_vect *v1, double scalar)
 {
 	t_vect	*rslt;
 
